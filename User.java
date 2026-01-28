@@ -1,4 +1,4 @@
-public abstract class User {
+public class User {
     String name;
     String phone;
     Address address;
@@ -17,7 +17,7 @@ public abstract class User {
         return phone;
     }
 
-    public Address getAddress() {
-        return address;
+    public String getAddress() {
+        return address.getAddress();
     }
 }

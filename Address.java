@@ -9,7 +9,16 @@ class Address {
         this.street = street;
     }
 
-    public String getAddress() {
-        return street + ", " + district + ", " + city;
+    public String getCity() {
+        return city;
+    }
+    public String getDistrict() {
+        return district;
+    }
+    public String getStreet() {
+        return street;
+    }
+    public String getAddress(){
+        return city + "," + district + "," + street ;
     }
 }

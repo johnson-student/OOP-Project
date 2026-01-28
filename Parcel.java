@@ -7,7 +7,7 @@ public class Parcel {
         this.weight = weight;
     }
     public void print(){
-        system.out.println("Items type: " + type);
-        system.out.println("weight: " + weight + "kg");
+        System.out.println("Items type: " + type);
+        System.out.println("weight: " + weight + "kg");
     }
 }
