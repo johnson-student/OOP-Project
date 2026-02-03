@@ -32,6 +32,14 @@ class DeliverySystem {
         }
         return null;
     }
+    
+    double calculateFee(Parcel parcel){
+        double baseFee = 2.0;
+        if(parcel.getType() == "liquid" || parcel.getType()== "glass"){
+            return 1 * parcel.getWeight() + baseFee;
+        }
+        return 0.5 * parcel.getWeight() + baseFee;
+    }
 
     DeliveryRequest createRequest(
             User sender,
@@ -44,9 +52,9 @@ class DeliverySystem {
             System.out.println("No courier available.");
             return null;
         }
+        double fee = calculateFee(parcel);
 
-        DeliveryRequest request =
-                new DeliveryRequest(sender, receiver, parcel, courier);
+        DeliveryRequest request = new DeliveryRequest(sender, receiver, parcel, courier , fee);
 
         courier.assignDelivery();
         

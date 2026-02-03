@@ -2,7 +2,7 @@ class Main {
     public static void main(String[] args) {
 
         // Create system (like CoffeeShop)
-        DeliverySystem system = new DeliverySystem(5);
+        DeliverySystem system = new DeliverySystem("CADT Delivery",5);
 
         // Add courier to system
         system.addCourier(new Courier("Neng", "011223344"));
