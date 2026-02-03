@@ -1,23 +1,23 @@
-public class User {
+class User {
     String name;
     String phone;
     Address address;
 
-    public User(String name, String phone, Address address) {
+    User(String name, String phone, Address address) {
         this.name = name;
         this.phone = phone;
         this.address = address;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public String getPhone() {
+    String getPhone() {
         return phone;
     }
 
-    public String getAddress() {
+    String getAddress() {
         return address.getFullAddress();
     }
 }

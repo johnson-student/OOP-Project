@@ -1,31 +1,32 @@
-public class Courier {
+class Courier {
+    String id;
     String name;
     String phone;
     boolean available;
 
-    public Courier(String name, String phone) {
+    Courier(String name, String phone) {
         this.name = name;
         this.phone = phone;
         this.available = true; // free by default
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public String getPhone() {
+    String getPhone() {
         return phone;
     }
 
-    public boolean isAvailable() {
+    boolean isAvailable() {
         return available;
     }
 
-    public void assignDelivery() {
+    void assignDelivery() {
         this.available = false;
     }
 
-    public void finishDelivery() {
+    void finishDelivery() {
         this.available = true;
     }
 }

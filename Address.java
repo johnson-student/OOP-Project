@@ -3,22 +3,22 @@ class Address {
     String district;
     String street;
 
-    public Address(String city, String district, String street) {
+    Address(String city, String district, String street) {
         this.city = city;
         this.district = district;
         this.street = street;
     }
 
-    public String getCity() {
+    String getCity() {
         return city;
     }
-    public String getDistrict() {
+    String getDistrict() {
         return district;
     }
-    public String getStreet() {
+    String getStreet() {
         return street;
     }
-    public String getFullAddress(){
+    String getFullAddress(){
         return city + "," + district + "," + street ;
     }
 }
