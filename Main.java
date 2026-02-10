@@ -1,12 +1,11 @@
 class Main {
     public static void main(String[] args) {
 
-        // Create system (like CoffeeShop)
         DeliverySystem system = new DeliverySystem("CADT Delivery",5);
 
         // Add courier to system
-        system.addCourier(new Courier("Neng", "011223344"));
-        system.addCourier(new Courier("john", "012222222"));
+        system.addCourier(new Courier("Neng", "011223344", 4.0));
+        system.addCourier(new Courier("john", "012222222", 4.5));
 
         // Addresses
         Address senderAddress = new Address(
@@ -23,7 +22,7 @@ class Main {
                 "Dom", "098765432", receiverAddress);
 
         // Parcel
-        Parcel parcel = new Parcel("Clothes", 2.5);
+        Parcel parcel = new Parcel("glass", 2.5 , 50.0);
 
         // Create delivery request
         DeliveryRequest request =

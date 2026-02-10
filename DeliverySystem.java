@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 class DeliverySystem {
     String systemName;
     Courier[] couriers;
@@ -35,10 +37,10 @@ class DeliverySystem {
     
     double calculateFee(Parcel parcel){
         double baseFee = 2.0;
-        if(parcel.getType() == "liquid" || parcel.getType()== "glass"){
-            return 1 * parcel.getWeight() + baseFee;
+        if(parcel.type.equals("liquid")|| parcel.type.equals("glass")){
+            return 1 * parcel.weight + baseFee;
         }
-        return 0.5 * parcel.getWeight() + baseFee;
+        return 0.5 * parcel.weight + baseFee;
     }
 
     DeliveryRequest createRequest(
@@ -60,4 +62,17 @@ class DeliverySystem {
         
         return request;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return "DeliverySystem [systemName=" + systemName + ", couriers=" + Arrays.toString(couriers)
+                + ", courierCount=" + courierCount + "]";
+    }
+
+    
 }
