@@ -47,11 +47,11 @@ public class DeliverySystem {
             System.out.println("No courier available.");
             return null;
         }
-        double fee = calculateFee(parcel);
+        double fee = PricingService.calculateFee(parcel);
 
         DeliveryRequest request = new DeliveryRequest(sender, receiver, parcel, courier , fee);
 
-        courier.assignDelivery();
+        courier.setStatus(false);
         
         return request;
     }

@@ -1,15 +1,17 @@
 import java.util.UUID;
 public class Parcel {
-    public String parcelId;
-    public String type;
-    public double weight;
-    public double price;
+    private String senderID;
+    private String parcelId;
+    private String type;
+    private double weight;
+    private double price;
 
-    Parcel(String type, double weight , double price) {
+    Parcel(String type, double weight , double price, String senderID) {
         this.type = type;
         this.weight = weight;
         this.price = price;
         this.parcelId = UUID.randomUUID().toString();
+        this.senderID = senderID;
     }
 
     public double getPrice(){
@@ -25,7 +27,7 @@ public class Parcel {
 
     @Override
     public String toString() {
-        return "[type=" + type + ", weight=" + weight + "]";
+        return "[type=" + type + ", weight=" + weight + ", ParcelID =  "+ parcelId+ ", SenderID = "+senderID +"]";
     }
 
     @Override

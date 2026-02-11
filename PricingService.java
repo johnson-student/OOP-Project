@@ -2,7 +2,7 @@ public class PricingService {
 
     static double calculateFee(Parcel parcel) {
         if (parcel == null) {
-            return ;
+            return 0.0;
         }
 
         double baseFee = 2.0;

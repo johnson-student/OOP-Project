@@ -1,22 +1,12 @@
-import java.util.UUID;
-
 public class Courier {
     private String id;
     private String name;
     private String phone;
     private boolean available;
     private double rating;
-
+    private static int courierCount = 0;
     Courier(String name, String phone, double rating) {
-        if (name == null || phone == null) {
-            return;
-        }
-
-        if (rating < 0 || rating > 5) {
-            return;
-        }
-
-        this.id = UUID.randomUUID().toString();
+        this.id = String.valueOf(++courierCount);
         this.name = name;
         this.phone = phone;
         this.available = true;
@@ -29,7 +19,7 @@ public class Courier {
     public double getRating() { return rating; }
     public boolean isAvailable() { return available; }
 
-    public void setDelivery(boolean available) {
+    public void setStatus(boolean available) {
         this.available = available;
     }
 

@@ -16,13 +16,13 @@ class Main {
 
         // Users
         User sender = new User(
-                "Son", "012345678", senderAddress);
+                "Son", "012345678","12345678", senderAddress, false);
 
         User receiver = new User(
                 "Dom", "098765432", receiverAddress);
 
         // Parcel
-        Parcel parcel = new Parcel("glass", 2.5 , 50.0);
+        Parcel parcel = new Parcel("glass", 2.5 , 50.0, sender.getID());
 
         // Create delivery request
         DeliveryRequest request =
