@@ -1,61 +1,62 @@
 import java.util.UUID;
-class Courier {
-    String id;
-    String name;
-    String phone;
-    boolean available;
-    double rating;
 
-    Courier(String name, String phone , double rating) {
+public class Courier {
+    private String id;
+    private String name;
+    private String phone;
+    private boolean available;
+    private double rating;
+
+    Courier(String name, String phone, double rating) {
+        if (name == null || phone == null) {
+            return;
+        }
+
+        if (rating < 0 || rating > 5) {
+            return;
+        }
+
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.phone = phone;
-        this.available = true; // free by default
+        this.available = true;
         this.rating = rating;
-        
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Courier{");
-        sb.append("id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append(", phone=").append(phone);
-        sb.append(", available=").append(available);
-        sb.append(", rating=").append(rating);
-        sb.append('}');
-        return sb.toString();
+    public String getId() { return id; }
+    public String getName() { return name; }
+    public String getPhone() { return phone; }
+    public double getRating() { return rating; }
+    public boolean isAvailable() { return available; }
+
+    public void setDelivery(boolean available) {
+        this.available = available;
+    }
+
+    public void setPhone(String newPhone){
+        if(newPhone == null) return;
+        this.phone = newPhone;
+    }
+
+    public void setRating(double newRating) {
+        if (newRating < 0 || newRating > 5) {
+            return ;
+        }
+        this.rating = newRating;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
-    } 
-
-    //getter
-    double getRating(){
-        return rating;
+        if (this == obj) return true;
+        if (!(obj instanceof Courier)) return false;
+        Courier other = (Courier) obj;
+        return id.equals(other.id);
     }
 
-    String getName() {
-        return name;
+    @Override
+    public String toString() {
+        return "Courier{id='" + id + "', name='" + name +
+                "', available=" + available +
+                ", rating=" + rating + "}";
     }
-
-    String getPhone() {
-        return phone;
-    }
-
-    boolean isAvailable() {
-        return available;
-    }
-
-    void assignDelivery() {
-        this.available = false;
-    }
-
-    // void finishDelivery() {
-    //     this.available = true;
-    // }
-  
 }

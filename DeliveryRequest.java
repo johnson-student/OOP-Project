@@ -1,10 +1,10 @@
- class DeliveryRequest {
-    String id;
-    User sender;
-    User receiver;
-    Parcel parcel;
-    Courier courier;
-    double fee;
+public class DeliveryRequest {
+    private String id;
+    private User sender;
+    private User receiver;
+    private Parcel parcel;
+    private Courier courier;
+    private double fee;
 
     DeliveryRequest(
             User sender,
@@ -20,11 +20,11 @@
         this.fee = fee;
     }
     
-     void printInfo() {
+    public void printInfo() {
         System.out.println("=== Delivery Request ===");
-        System.out.println("Sender: " + sender.name);
-        System.out.println("Receiver: " + receiver.name);
-        System.out.println("Courier: " + courier.name);
+        System.out.println("Sender: " + sender.getName());
+        System.out.println("Receiver: " + receiver.getName());
+        System.out.println("Courier: " + courier.getName());
         System.out.println("Fee: " + fee + "$");
         System.out.println("parcel info: " + parcel.toString());
     }

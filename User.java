@@ -1,40 +1,40 @@
-class User {
+import java.util.UUID;
+public class User {
+    private String userID;
     private String name;
     private String phone;
     private Address address;
     private boolean isMembership;
-    private double balance;
     private int useCount;
 
-    User(String name, String phone, Address address, double balance, boolean isMembership) {
+    User(String name, String phone, Address address) {
         this.name = name;
         this.phone = phone;
         this.address = address;
-        this.balance = balance;
-        this.isMembership = isMembership;
-        this.useCount = 0;
     }
 
-    String getName() { return name; }
-    String getPhone() { return phone; }
-    Address getAddress() { return address; }
-    double getBalance() { return balance; }
-    boolean isMember() { return isMembership; }
-    int getUseCount() { return useCount; }
+    User(String name, String phone, Address address, boolean isMembership) {
+        userID = UUID.randomUUID().toString();
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.isMembership = isMembership;
+        useCount = 0;
+    }
 
-    void setMembership(boolean isMembership){
+    public String getID() { return userID; }
+    public String getName() { return name; }
+    public String getPhone() { return phone; }
+    public Address getAddress() { return address; }
+    public boolean isMember() { return isMembership; }
+    public int getUseCount() { return useCount; }
+
+    public void setMembership(boolean isMembership){
         this.isMembership = isMembership;
     }
 
-    void increaseUseCount() {
+    public void increaseUseCount() {
         useCount++;
-    }
-
-    boolean deductBalance(double amount) {
-        if (balance < amount) return false;
-        balance -= amount;
-        increaseUseCount();
-        return true;
     }
 
     @Override

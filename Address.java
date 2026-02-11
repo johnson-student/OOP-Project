@@ -1,7 +1,7 @@
-class Address {
-    String city;
-    String district;
-    String street;
+public class Address {
+    private String city;
+    private String district;
+    private String street;
     
     Address(String city, String district, String street) {
         this.city = city;
@@ -10,13 +10,13 @@ class Address {
     }
     
     //getter
-    String getCity() {
+    public String getCity() {
         return city;
     }
-    String getDistrict() {
+    public String getDistrict() {
         return district;
     }
-    String getStreet() {
+    public String getStreet() {
         return street;
     }
 

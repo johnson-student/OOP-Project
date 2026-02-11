@@ -1,9 +1,9 @@
 import java.util.UUID;
-class Parcel {
-    String parcelId;
-    String type;
-    double weight;
-    double price;
+public class Parcel {
+    public String parcelId;
+    public String type;
+    public double weight;
+    public double price;
 
     Parcel(String type, double weight , double price) {
         this.type = type;
@@ -11,6 +11,17 @@ class Parcel {
         this.price = price;
         this.parcelId = UUID.randomUUID().toString();
     }
+
+    public double getPrice(){
+        return price;
+    }
+
+    public double getWeight(){
+        return weight;
+    }
+    public String getType(){
+        return type;
+    }  
 
     @Override
     public String toString() {
@@ -26,17 +37,4 @@ class Parcel {
         return parcelId;
     }
 
-
-
-    
-    // double getPrice(){
-    //     return price;
-    // }
-
-    // double getWeight(){
-    //     return weight;
-    // }
-    // String getType(){
-    //     return type;
-    // }  
 }

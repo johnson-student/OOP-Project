@@ -1,9 +1,9 @@
 import java.util.Arrays;
 
-class DeliverySystem {
-    String systemName;
-    Courier[] couriers;
-    int courierCount;
+public class DeliverySystem {
+    private String systemName;
+    private Courier[] couriers;
+    private int courierCount;
 
     DeliverySystem(String systemName,int maxCouriers) {
         couriers = new Courier[maxCouriers];
@@ -11,7 +11,7 @@ class DeliverySystem {
         courierCount = 0;
     }
 
-    void addCourier(Courier courier) {
+    public void addCourier(Courier courier) {
         if (courierCount < couriers.length) {
             couriers[courierCount] = courier;
             courierCount++;
@@ -21,12 +21,12 @@ class DeliverySystem {
     }
 
 
-    String getName(){
+    public String getName(){
         return systemName;
     }
 
     // like getAvailableDriver()
-    Courier getAvailableCourier() {
+    public Courier getAvailableCourier() {
         for (int i = 0; i < courierCount; i++) {
             if (couriers[i].isAvailable()) {
                 return couriers[i];
@@ -35,15 +35,8 @@ class DeliverySystem {
         return null;
     }
     
-    double calculateFee(Parcel parcel){
-        double baseFee = 2.0;
-        if(parcel.type.equals("liquid")|| parcel.type.equals("glass")){
-            return 1 * parcel.weight + baseFee;
-        }
-        return 0.5 * parcel.weight + baseFee;
-    }
 
-    DeliveryRequest createRequest(
+    public DeliveryRequest createRequest(
             User sender,
             User receiver,
             Parcel parcel
