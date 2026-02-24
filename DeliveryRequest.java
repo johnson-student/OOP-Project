@@ -5,6 +5,7 @@ public class DeliveryRequest {
     private Parcel parcel;
     private Courier courier;
     private double fee;
+    public static int requestCount = 0;
 
     DeliveryRequest(
             User sender,
@@ -13,12 +14,15 @@ public class DeliveryRequest {
             Courier courier,
             double fee
     ) {
+        this.id =String.valueOf(requestCount++);
         this.sender = sender;
         this.receiver = receiver;
         this.parcel = parcel;
         this.courier = courier;
         this.fee = fee;
     }
+    
+    public String getId() { return id; }
     
     public void printInfo() {
         System.out.println("=== Delivery Request ===");

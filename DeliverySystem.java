@@ -1,23 +1,34 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DeliverySystem {
     private String systemName;
-    private Courier[] couriers;
-    private int courierCount;
+    private ArrayList<Courier> couriers;
+    private ArrayList<User> users;
+    private ArrayList<Parcel> parcels;
+    private String telegram;
+    private int parcelCount;
 
-    DeliverySystem(String systemName,int maxCouriers) {
-        couriers = new Courier[maxCouriers];
+    DeliverySystem(String systemName, String telegram) {
+        couriers = new ArrayList<>();
+        users = new ArrayList<>();
         this.systemName = systemName;
-        courierCount = 0;
+        this.telegram = telegram;
+        parcelCount = 0;
     }
 
     public void addCourier(Courier courier) {
-        if (courierCount < couriers.length) {
-            couriers[courierCount] = courier;
-            courierCount++;
-        } else {
-            System.out.println("Courier list is full.");
-        }
+        couriers.add(courier);
+    }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void addParcel(Parcel parcel) {
+        parcels.add(parcel);
+        parcelCount++;
     }
 
 
@@ -25,11 +36,29 @@ public class DeliverySystem {
         return systemName;
     }
 
+    public String getTele(){
+        return telegram;
+    }
+    
+    static double calculateFee(Parcel parcel) {
+        if (parcel == null) {
+            return 0.0;
+        }
+
+        double baseFee = 2.0;
+
+        if (parcel.getType().equals("liquid") || parcel.getType().equals("glass")) {
+            return parcel.getWeight() * 1.0 + baseFee;
+        }
+
+        return parcel.getWeight() * 0.5 + baseFee;
+    }
+
     // like getAvailableDriver()
     public Courier getAvailableCourier() {
-        for (int i = 0; i < courierCount; i++) {
-            if (couriers[i].isAvailable()) {
-                return couriers[i];
+        for (int i = 0; i < couriers.size(); i++) {
+            if (couriers.get(i).isAvailable()) {
+                return couriers.get(i);
             }
         }
         return null;
@@ -43,13 +72,15 @@ public class DeliverySystem {
     ) {
         Courier courier = getAvailableCourier();
 
+        addParcel(parcel);
+
         if (courier == null) {
             System.out.println("No courier available.");
             return null;
         }
-        double fee = PricingService.calculateFee(parcel);
-
+        double fee = calculateFee(parcel);
         DeliveryRequest request = new DeliveryRequest(sender, receiver, parcel, courier , fee);
+        DeliveryRequest.requestCount++;
 
         courier.setStatus(false);
         
@@ -63,8 +94,8 @@ public class DeliverySystem {
 
     @Override
     public String toString() {
-        return "DeliverySystem [systemName=" + systemName + ", couriers=" + Arrays.toString(couriers)
-                + ", courierCount=" + courierCount + "]";
+        return "DeliverySystem [systemName=" + systemName + ", couriers=" + Arrays.toString(couriers.toArray()) + ", users=" + Arrays.toString(users.toArray()) + ", parcels=" + Arrays.toString(parcels.toArray())
+                + ", courierCount=" + Courier.courierCount + "]";
     }
 
     

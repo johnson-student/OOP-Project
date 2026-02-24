@@ -1,11 +1,11 @@
 class Main {
     public static void main(String[] args) {
 
-        DeliverySystem system = new DeliverySystem("CADT Delivery",5);
+        DeliverySystem system = new DeliverySystem("CADT Delivery","0125485");
 
         // Add courier to system
-        system.addCourier(new Courier("Neng", "011223344", 4.0));
-        system.addCourier(new Courier("john", "012222222", 4.5));
+        system.addCourier(new Courier("Neng", "011223344", "neng123", 4.0));
+        system.addCourier(new Courier("john", "012222222", "john123", 4.5));
 
         // Addresses
         Address senderAddress = new Address(
