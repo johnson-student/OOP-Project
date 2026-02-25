@@ -4,11 +4,13 @@ public class Parcel {
     private String parcelId;
     private String type;
     private double weight;
+    private int qtt;
     private double price;
 
-    Parcel(String type, double weight , double price, String senderID) {
+    Parcel(String type, double weight , int qtt, double price, String senderID) {
         this.type = type;
         this.weight = weight;
+        this.qtt = qtt;
         this.price = price;
         this.parcelId = UUID.randomUUID().toString();
         this.senderID = senderID;
@@ -24,6 +26,9 @@ public class Parcel {
     public String getType(){
         return type;
     }  
+    public int getQtt(){
+        return qtt;
+    }
 
     @Override
     public String toString() {

@@ -15,17 +15,22 @@ public class DeliverySystem {
 
 
     private String systemName;
+    private String loaction;
     private ArrayList<Courier> couriers;
     private ArrayList<User> users;
     private ArrayList<Parcel> parcels;
+    private ArrayList<DeliveryRequest> requests;
     private String telegram;
     private int parcelCount;
 
-    DeliverySystem(String systemName, String telegram) {
+    DeliverySystem(String systemName, String telegram, String location) {
         couriers = new ArrayList<>();
         users = new ArrayList<>();
+        requests = new ArrayList<>();
+        this.loaction =location;
         this.systemName = systemName;
         this.telegram = telegram;
+        
         parcelCount = 0;
     }
 
@@ -92,6 +97,7 @@ public class DeliverySystem {
         double fee = calculateFee(parcel);
         DeliveryRequest request = new DeliveryRequest(sender, receiver, parcel, courier , fee);
         DeliveryRequest.requestCount++;
+        requests.add(request);
 
         courier.setStatus(false);
         
