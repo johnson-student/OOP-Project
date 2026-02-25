@@ -28,7 +28,7 @@ public class DeliveryRequest {
         System.out.println("=== Delivery Request ===");
         System.out.println("Sender: " + sender.getName());
         System.out.println("Receiver: " + receiver.getName());
-        System.out.println("Courier: " + courier.getName());
+        System.out.println("Courier: " + courier.getUsername());
         System.out.println("Fee: " + fee + "$");
         System.out.println("parcel info: " + parcel.toString());
     }

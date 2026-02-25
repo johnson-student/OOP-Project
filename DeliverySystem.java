@@ -3,6 +3,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DeliverySystem {
+
+    public static final String CREATE_STAFF = "CREATE_STAFF";
+    public static final String CREATE_CUSTOMER = "CREATE_CUSTOMER";
+    public static final String SET_PRICE_DELIVERY = "SET_PRICE_DELIVERY";
+    public static final String CREATE_ORDER = "CREATE_ORDER";
+    public static final String VIEW_CUSTOMERS = "VIEW_CUSTOMERS";
+    public static final String VIEW_ORDERS = "VIEW_ORDERS";
+    public static final String UPDATE_ORDER_STATUS = "UPDATE_ORDER_STATUS";
+
+
+
     private String systemName;
     private ArrayList<Courier> couriers;
     private ArrayList<User> users;
@@ -18,7 +29,7 @@ public class DeliverySystem {
         parcelCount = 0;
     }
 
-    public void addCourier(Courier courier) {
+    public void addStaff(Courier courier) {
         couriers.add(courier);
     }
 

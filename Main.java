@@ -4,8 +4,8 @@ class Main {
         DeliverySystem system = new DeliverySystem("CADT Delivery","0125485");
 
         // Add courier to system
-        system.addCourier(new Courier("Neng", "011223344", "neng123", 4.0));
-        system.addCourier(new Courier("john", "012222222", "john123", 4.5));
+        system.addStaff(new Courier("Neng", "011223344", "neng123","Courier", 4.0));
+        system.addStaff(new Courier("john", "012222222", "john123", "Manager", 4.5));
 
         // Addresses
         Address senderAddress = new Address(

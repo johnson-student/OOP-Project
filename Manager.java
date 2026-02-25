@@ -1,6 +1,6 @@
-public class Courier implements InStaff {
-
-    private String staffIdString;
+public class Manager implements InStaff {
+    
+    private String staffId;
     private String name;
     private String phone;
     private boolean available;
@@ -10,8 +10,8 @@ public class Courier implements InStaff {
     public static int courierCount = 0;
 
     // Constructor
-    Courier(String name, String phone, String password, String position,double rating) {
-        this.staffIdString = String.valueOf(++courierCount);
+    Manager(String name, String phone, String password, String position,double rating) {
+        this.staffId = String.valueOf(++courierCount);
         setPassword(password);
         setName(name);
         setPhone(phone);
@@ -20,22 +20,18 @@ public class Courier implements InStaff {
         setRating(rating);
     }
 
-    
-
     @Override
     public boolean can(String action) {
-        if(action.equals(DeliverySystem.UPDATE_ORDER_STATUS)||action.equals(DeliverySystem.VIEW_ORDERS)||action.equals(DeliverySystem.VIEW_CUSTOMERS)){ 
-            return true;
-            }
-        return false;
-        }
-
+        // TODO Auto-generated method stub
+        return true;
+    }
+    
     public boolean checkPassword(String input) {
         return password != null && password.equals(input);
     }
 
     // Getters 
-    public String getStaffId() { return staffIdString; }
+    public String getStaffId() { return staffId; }
     public String getUsername() { return name; }
     public String getPhone() { return phone; }
     public double getRating() { return rating; }
@@ -119,14 +115,14 @@ public class Courier implements InStaff {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Courier)) return false;
-        Courier other = (Courier) obj;
-        return staffIdString.equals(other.staffIdString);
+        if (!(obj instanceof Manager)) return false;
+        Manager other = (Manager) obj;
+        return staffId.equals(other.staffId);
     }
 
     @Override
     public String toString() {
-        return "Courier{staffIdString='" + staffIdString + "', name='" + name +
+        return "Manager{staffId='" + staffId + "', name='" + name +
                 "', available=" + available +
                 ", rating=" + rating + "}";
     }
