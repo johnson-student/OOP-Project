@@ -1,46 +1,45 @@
-public class Courier implements InStaff {
-
+package user;
+public class Staff implements InStaff {
     private String staffIdString;
     private String name;
     private String phone;
-    private boolean available;
     private double rating;
     private String password;
     private String position; 
-    public static int courierCount = 0;
+    boolean active = true;
+    public static int staffCount = 0;
 
     // Constructor
-    Courier(String name, String phone, String password, String position,double rating) {
-        this.staffIdString = String.valueOf(++courierCount);
+    public Staff(String name, String phone, String password, String position,double rating) {
+        this.staffIdString = String.valueOf(++staffCount);
         setPassword(password);
         setName(name);
         setPhone(phone);
         setPosition(position);
-        setStatus(true);
         setRating(rating);
     }
 
-    
-
-    @Override
+  @Override
     public boolean can(String action) {
-        if(action.equals(DeliverySystem.UPDATE_ORDER_STATUS)||action.equals(DeliverySystem.VIEW_ORDERS)||action.equals(DeliverySystem.VIEW_CUSTOMERS)){ 
-            return true;
-            }
-        return false;
-        }
+        // TODO Auto-generated method stub
+        return true;
+    }
 
     public boolean checkPassword(String input) {
         return password != null && password.equals(input);
     }
 
     // Getters 
+    public String getPassword() { return password; }
     public String getStaffId() { return staffIdString; }
     public String getUsername() { return name; }
     public String getPhone() { return phone; }
     public double getRating() { return rating; }
-    public boolean isAvailable() { return available; }
     public String getPosition() { return position; }
+    public boolean isActive() { return active; }
+    public String getFullname() {
+        return name;
+     }
 
     // Setters
     public void setPassword(String newPassword) {
@@ -85,9 +84,6 @@ public class Courier implements InStaff {
             System.out.println("fill with the requestment length");
         }
     }
-    public void setStatus(boolean available) {
-        this.available = available;
-    }
 
     public void setPhone(String phone) {
         String p = (phone == null) ? "" : phone.trim();
@@ -119,15 +115,14 @@ public class Courier implements InStaff {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Courier)) return false;
-        Courier other = (Courier) obj;
+        if (!(obj instanceof Staff)) return false;
+        Staff other = (Staff) obj;
         return staffIdString.equals(other.staffIdString);
     }
 
     @Override
     public String toString() {
-        return "Courier{staffIdString='" + staffIdString + "', name='" + name +
-                "', available=" + available +
+        return "Staff{staffIdString='" + staffIdString + "', name='" + name +
                 ", rating=" + rating + "}";
     }
 }

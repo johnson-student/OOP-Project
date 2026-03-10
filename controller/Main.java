@@ -1,4 +1,7 @@
+package controller;
 import java.util.Scanner;
+import user.Staff;
+import user.Courier;
 public class Main {
 
     public static void main(String[] args) {
@@ -6,6 +9,9 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         DeliverySystem system = new DeliverySystem("CADT Cafe", "013261425","Phnom Penh");
 
+        Staff neng = new Staff("Neng", "012345678", "Neng@12345", "Courier", 0.0);
+        Courier courierNeng = new Courier(neng);
+        system.addStaff(courierNeng);
         int choice;
 
         do {
@@ -29,11 +35,6 @@ public class Main {
 
                         system.staffLogin(username, password);
                         System.out.println(system.getLastMessage());
-                        break;
-                    }
-
-                    case 2: {
-                        system.printMenuItems();
                         break;
                     }
 
@@ -80,8 +81,8 @@ public class Main {
                         break;
                     }
 
-                    case 2: { // Create Customer
-                        System.out.print("Customer ID: ");
+                    case 2: { // Create User
+                        System.out.print("User ID: ");
                         String customerId = sc.nextLine();
 
                         System.out.print("Full Name: ");
@@ -93,99 +94,29 @@ public class Main {
                         System.out.print("Password: ");
                         String password = sc.nextLine();
 
-                        System.out.print("Initial Balance: ");
-                        double balance = sc.nextDouble();
+                        System.out.print("Is Member? (true/false): ");
+                        boolean isMember = sc.nextBoolean();
                         sc.nextLine();
 
-                        system.createCustomer(customerId, fullName, phone, password, balance);
+                        system.createUser(customerId, fullName, phone, password, isMember);
                         System.out.println(system.getLastMessage());
                         break;
                     }
+                    // case 3: { // Create Order
+                    //     System.out.print("Customer phone: ");
+                    //     String phone = sc.nextLine();
 
-                    case 3: { // Create Menu Item
-                        System.out.print("Item ID: ");
-                        String itemId = sc.nextLine();
+                    //     System.out.print("Menu item ID: ");
+                    //     String itemId = sc.nextLine();
 
-                        System.out.print("Item Name: ");
-                        String name = sc.nextLine();
+                    //     System.out.print("Quantity: ");
+                    //     int qty = sc.nextInt();
+                    //     sc.nextLine();
 
-                        System.out.print("Category: ");
-                        String category = sc.nextLine();
-
-                        System.out.print("Size (S/M/L/None): ");
-                        String size = sc.nextLine();
-
-                        System.out.print("Price: ");
-                        double price = sc.nextDouble();
-                        sc.nextLine();
-
-                        System.out.print("Available? (1=Yes, 0=No): ");
-                        int a = sc.nextInt();
-                        sc.nextLine();
-
-                        boolean available = (a == 1);
-
-                        system.createMenuItem(itemId, name, category, size, price, available);
-                        System.out.println(system.getLastMessage());
-                        break;
-                    }
-
-                    case 4: { // Set Menu Item Availability
-                        System.out.print("Item ID: ");
-                        String itemId = sc.nextLine();
-
-                        System.out.print("Available? (1=Yes, 0=No): ");
-                        int a = sc.nextInt();
-                        sc.nextLine();
-
-                        boolean available = (a == 1);
-
-                        system.setMenuItemAvailability(itemId, available);
-                        System.out.println(system.getLastMessage());
-                        break;
-                    }
-
-                    case 5: { // Create Order
-                        System.out.print("Customer phone: ");
-                        String phone = sc.nextLine();
-
-                        System.out.print("Menu item ID: ");
-                        String itemId = sc.nextLine();
-
-                        System.out.print("Quantity: ");
-                        int qty = sc.nextInt();
-                        sc.nextLine();
-
-                        system.createOrder(phone, itemId, qty);
-                        System.out.println(system.getLastMessage());
-                        break;
-                    }
-
-                    case 6: { // List Customers
-                        system.printCustomers();
-                        break;
-                    }
-
-                    case 7: { // List Menu Items
-                        system.printMenuItems();
-                        break;
-                    }
-
-                    case 8: { // List Orders
-                        system.printOrders();
-                        break;
-                    }
-
-                    case 9: { // Logout
-                        system.staffLogout();
-                        System.out.println(system.getLastMessage());
-                        break;
-                    }
-
-                    case 0: {
-                        System.out.println("Goodbye!");
-                        break;
-                    }
+                    //     system.createRequest();
+                    //     System.out.println(system.getLastMessage());
+                    //     break;
+                    // }
 
                     default:
                         System.out.println("Invalid choice.");

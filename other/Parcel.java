@@ -1,3 +1,4 @@
+package other;
 import java.util.UUID;
 public class Parcel {
     private String senderID;

@@ -1,3 +1,7 @@
+package other;
+import user.Courier;
+import user.User;
+
 public class DeliveryRequest {
     private String id;
     private User sender;
@@ -7,7 +11,7 @@ public class DeliveryRequest {
     private double fee;
     public static int requestCount = 0;
 
-    DeliveryRequest(
+   public DeliveryRequest(
             User sender,
             User receiver,
             Parcel parcel,

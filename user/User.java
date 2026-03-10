@@ -1,44 +1,47 @@
-public class Manager implements InStaff {
-    
-    private String staffId;
+package user;
+import other.Address;
+
+public class User {
+    private String userID;
     private String name;
     private String phone;
-    private boolean available;
-    private double rating;
+    private Address address;
+    private boolean isMembership;
     private String password;
-    private String position; 
-    public static int courierCount = 0;
+    private int useCount;
+    static  int userCount = 0;
 
-    // Constructor
-    Manager(String name, String phone, String password, String position,double rating) {
-        this.staffId = String.valueOf(++courierCount);
-        setPassword(password);
+    public User(String name, String phone, Address address) {
         setName(name);
         setPhone(phone);
-        setPosition(position);
-        setStatus(true);
-        setRating(rating);
+        this.address = address;
     }
 
-    @Override
-    public boolean can(String action) {
-        // TODO Auto-generated method stub
-        return true;
+    public User(String name, String phone, String password, boolean isMembership) {
+        userID = String.valueOf(++userCount);
+        setName(name);
+        setPhone(phone);
+        setPassword(password);
+        setMembership(isMembership);
+        useCount = 0;
     }
     
-    public boolean checkPassword(String input) {
-        return password != null && password.equals(input);
+    public void increaseUseCount() {
+        useCount++;
     }
-
-    // Getters 
-    public String getStaffId() { return staffId; }
-    public String getUsername() { return name; }
+    // Getters
+    public String getUserID() { return userID; }
+    public String getName() { return name; }
     public String getPhone() { return phone; }
-    public double getRating() { return rating; }
-    public boolean isAvailable() { return available; }
-    public String getPosition() { return position; }
+    public Address getAddress() { return address; }
+    public boolean isMember() { return isMembership; }
+    public int getUseCount() { return useCount; }
 
     // Setters
+    public void setMembership(boolean isMembership){
+        this.isMembership = isMembership;
+    }
+
     public void setPassword(String newPassword) {
         // regex
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
@@ -63,10 +66,6 @@ public class Manager implements InStaff {
         }
     }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
     public void setName(String name, String password){
         if(this.password.equals(password)){
             this.name = name;
@@ -81,22 +80,12 @@ public class Manager implements InStaff {
             System.out.println("fill with the requestment length");
         }
     }
-    public void setStatus(boolean available) {
-        this.available = available;
-    }
 
     public void setPhone(String phone) {
         String p = (phone == null) ? "" : phone.trim();
         // simple validation: only digits, length 8–15
         if (!isDigits(p) || p.length() < 8 || p.length() > 15) this.phone = "00000000";
         else this.phone = p;
-    }
-
-    public void setRating(double newRating) {
-        if (newRating < 0 || newRating > 5) {
-            return ;
-        }
-        this.rating = newRating;
     }
 
     private boolean isBlank(String s) {
@@ -115,15 +104,15 @@ public class Manager implements InStaff {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Manager)) return false;
-        Manager other = (Manager) obj;
-        return staffId.equals(other.staffId);
+        if (!(obj instanceof User)) return false;
+        User other = (User) obj;
+        return phone.equals(other.phone);
     }
 
     @Override
     public String toString() {
-        return "Manager{staffId='" + staffId + "', name='" + name +
-                "', available=" + available +
-                ", rating=" + rating + "}";
+        return "User{name='" + name + "', phone='" + phone +
+                "', membership=" + isMembership +
+                ", useCount=" + useCount + "}";
     }
 }
