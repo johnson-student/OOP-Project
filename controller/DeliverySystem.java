@@ -2,14 +2,10 @@ package controller;
 // import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import other.Address;
 import other.DeliveryRequest;
 import other.Parcel;
-import user.BaristaStaff;
-import user.CashierStaff;
 import user.Courier;
 import user.Manager;
-import user.ManagerStaff;
 import user.Staff;
 import user.User;
 
@@ -23,8 +19,6 @@ public class DeliverySystem {
     public static final String VIEW_ORDERS = "VIEW_ORDERS";
     public static final String UPDATE_ORDER_STATUS = "UPDATE_ORDER_STATUS";
 
-
-    private Address address;
     private String systemName;
     private String location;
     private ArrayList<Staff> Staffs;
@@ -32,7 +26,6 @@ public class DeliverySystem {
     private ArrayList<Parcel> parcels;
     private ArrayList<DeliveryRequest> requests;
     private String telegram;
-    private int parcelCount;
     private Staff loggedInStaff; 
     private String lastMessage;
 
@@ -46,24 +39,34 @@ public class DeliverySystem {
         this.telegram = telegram;
         // Default admin (so system can start)
         seedDefaultAdmin();
-        parcelCount = 0;
     }
 
     public void addStaff(Staff staff) {
+    if(staff == null) {
+        setLastMessage("Staff cannot be null");
+        return;
+    }
         Staffs.add(staff);
     }
 
     public void addUser(User user) {
+        if(user == null) {
+            setLastMessage("User cannot be null");
+            return;
+        }
         users.add(user);
     }
 
     public void addParcel(Parcel parcel) {
+    if(parcel == null) {
+        setLastMessage("Parcel cannot be null");
+        return;
+    }
         parcels.add(parcel);
-        parcelCount++;
     }
     // Getters
     public int getParcelCount() {
-        return parcelCount;
+        return parcels.size();
     }
 
     public boolean isStaffLoggedIn() { return loggedInStaff != null; }
@@ -85,7 +88,7 @@ public class DeliverySystem {
     }
     
     public String getLastMessage() {
-    return lastMessage;
+        return lastMessage;
     }
     
     private void setLastMessage(String msg) {
@@ -94,11 +97,9 @@ public class DeliverySystem {
 
 // default admin
     private void seedDefaultAdmin() {
-        Staff s1 = new Staff("Alice", "054154444", "ALice@12345", "Manager", 5.0);
-        Manager admin = new Manager(s1, 500.0);
+        Manager admin = new Manager("alice","admin", "054154444", "admin@12345", 5.0, 500);
         Staffs.add(admin);
-        // staffs.add(new CashierStaff());
-        // staffs.add(new BaristaStaff());
+        // staffs.add(new Courier());
         // staffs.add(new ManagerStaff());
         // for(Staff staff : staffs){
         //     System.out.println(staff.can("CREATE_ORDER"));
@@ -198,13 +199,11 @@ public class DeliverySystem {
 
         if(position.equals("Manager"))
         {
-            Staff s2 = new Staff(fullName, phone, password, position, 5.0);
-            Staffs.add(new Manager(s2, 1000.0));
+            Staffs.add(new Manager(fullName,username, phone, password, 0.0 , 5000));
             setLastMessage("Manager created successfully.");
         }else if(position.equals("Courier"))
         {   
-            Staff s3 = new Staff(fullName, phone, password, position, 0.0);
-            Staffs.add(new Courier(s3));
+            Staffs.add(new Courier(fullName,username, phone, password, 0.0 , 400));
             setLastMessage("Courier created successfully.");
         }
     }
@@ -223,22 +222,18 @@ public class DeliverySystem {
         return parcel.getWeight() * 0.5 + baseFee;
     }
 
-    public void createUser(String customerId, String fullName, String phone,
+    public void createUser(String fullName, String phone,
                                String password, boolean isMember) {
 
         if (!requireStaffLogin()) return;
 
-        if (isBlank(customerId) || isBlank(phone)) {
-            setLastMessage("Cannot create customer: customerId/phone is empty.");
+        if (isBlank(phone)) {
+            setLastMessage("Cannot create customer: phone is empty.");
             return;
         }
 
         // duplicate check
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserID().equalsIgnoreCase(customerId.trim())) {
-                setLastMessage("Cannot create customer: customerId already exists.");
-                return;
-            }
             if (users.get(i).getPhone().equals(phone.trim())) {
                 setLastMessage("Cannot create customer: phone already exists.");
                 return;
@@ -295,7 +290,10 @@ public class DeliverySystem {
         return "DeliverySystem [systemName=" + systemName + ", couriers=" + Arrays.toString(Staffs.toArray()) + ", users=" + Arrays.toString(users.toArray()) + ", parcels=" + Arrays.toString(parcels.toArray())
                 + ", StaffCount=" + Staffs.size() + "]";
     }
-
+    
+    public Parcel createParcel(String type, double weight, double price, String senderID){
+        return new Parcel(type, weight, price, senderID);
+    }
     
 }
     

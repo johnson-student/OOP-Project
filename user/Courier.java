@@ -2,13 +2,25 @@ package user;
 import controller.DeliverySystem;
 public class Courier extends Staff {
     private boolean available;
-
+    
     // Constructor
-    public Courier(String name, String phone, String password, double rating) {
-        super(name, phone, password, "Courier", rating);
+    public Courier(String fullName, String username, String phone, String password, double rating ,float salary) {
+        super(fullName,username, phone, password, rating , salary);
         this.available = true;
     }
+
     
+    @Override
+    public void setSalary(float salary) {
+        if(salary > 500)
+        {
+            System.out.println("error: too much salary");
+        }else
+        {
+            super.setSalary(salary);
+        }
+    }
+
     public boolean isAvailable() {
         return available;
     }
@@ -30,6 +42,10 @@ public class Courier extends Staff {
         }
         return true;
     }
+    @Override
+    public String toString() {
+        return super.toString() + "Available:" + available;
+    }
 
     @Override
     public boolean can(String action) {
@@ -41,12 +57,6 @@ public class Courier extends Staff {
 }
     
 
-    // @Override
-    // public String toString() {
-    //     return "Courier{staffIdString='" + staffIdString + "', name='" + name +
-    //             "', available=" + available +
-    //             ", rating=" + rating + "}";
-    // }
     // public boolean checkPassword(String input) {
     //     return password != null && password.equals(input);
     // }

@@ -1,11 +1,10 @@
 package user;
-public class Manager extends Staff {
+public class Manager extends Courier {
     private double bonus;
-    private float salary;
     // Constructor
-    public Manager(Staff s, double bonus) {
-        super(s.getUsername(), s.getPhone(), s.getPassword(), s.getPosition(), s.getRating());
-        setBonus(bonus);
+    public Manager(String fullName,String username, String phone, String password, double rating , float salary) {
+        super(fullName,username, phone, password, rating, salary);
+        setBonus(0);
     }
 
     // getter setter
@@ -13,9 +12,6 @@ public class Manager extends Staff {
         return bonus;
     }
     
-    public float getSalary() {
-        return salary;
-    }
 
     public void setBonus(double bonus) {
         if (bonus < 0) {
@@ -25,13 +21,14 @@ public class Manager extends Staff {
         this.bonus = bonus;
     }
 
+    @Override
     public void setSalary(float salary) {
-        if(salary<400)
+        if( salary < 500 )
         {
             System.out.println("error: need more salary");
         }else
         {
-            this.salary = salary;
+            super.setSalary(salary);
         }
     }
 
@@ -49,12 +46,11 @@ public class Manager extends Staff {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Manager)) return false;
-        
         Manager other = (Manager) obj;
         if (!super.equals(obj)) 
         {
              return false; 
-        }else if(Float.floatToIntBits(salary) != Float.floatToIntBits(other.salary))
+        }else if(Double.doubleToLongBits(bonus) != Double.doubleToLongBits(other.bonus))
         { 
             return false;
         }  

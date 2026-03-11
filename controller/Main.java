@@ -1,7 +1,6 @@
 package controller;
 import java.util.Scanner;
-import user.Staff;
-import user.Courier;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -9,9 +8,6 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         DeliverySystem system = new DeliverySystem("CADT Cafe", "013261425","Phnom Penh");
 
-        Staff neng = new Staff("Neng", "012345678", "Neng@12345", "Courier", 0.0);
-        Courier courierNeng = new Courier(neng);
-        system.addStaff(courierNeng);
         int choice;
 
         do {
@@ -58,8 +54,6 @@ public class Main {
                 switch (choice) {
 
                     case 1: { // Create Staff
-                        System.out.print("Staff ID: ");
-                        String staffId = sc.nextLine();
 
                         System.out.print("Full Name: ");
                         String fullName = sc.nextLine();
@@ -76,14 +70,12 @@ public class Main {
                         System.out.print("Position: ");
                         String position = sc.nextLine();
 
-                        system.createStaff(staffId, fullName, phone, username, password, position);
+                        system.createStaff(fullName, phone, username, password, position);
                         System.out.println(system.getLastMessage());
                         break;
                     }
 
                     case 2: { // Create User
-                        System.out.print("User ID: ");
-                        String customerId = sc.nextLine();
 
                         System.out.print("Full Name: ");
                         String fullName = sc.nextLine();
@@ -98,25 +90,35 @@ public class Main {
                         boolean isMember = sc.nextBoolean();
                         sc.nextLine();
 
-                        system.createUser(customerId, fullName, phone, password, isMember);
+                        system.createUser( fullName, phone, password, isMember);
                         System.out.println(system.getLastMessage());
                         break;
                     }
-                    // case 3: { // Create Order
-                    //     System.out.print("Customer phone: ");
-                    //     String phone = sc.nextLine();
+                    case 3: { // Create Order
+                        System.out.print("Customer phone: ");
+                        String phone = sc.nextLine();
 
-                    //     System.out.print("Menu item ID: ");
-                    //     String itemId = sc.nextLine();
+                        System.out.print("Menu item ID: ");
+                        String itemId = sc.nextLine();
+                        
+                        System.out.print("Enter your Item info: ");
+                        System.out.print("Enter your Item type: ");
+                        int type = sc.nextInt();
+    
+                        
+                        System.out.print("Quantity: ");
+                        int qty = sc.nextInt();
+                        sc.nextLine();
+                        
+                        System.out.print("Quantity: ");
+                        int qty = sc.nextInt();
+                        sc.nextLine();
+                        
 
-                    //     System.out.print("Quantity: ");
-                    //     int qty = sc.nextInt();
-                    //     sc.nextLine();
-
-                    //     system.createRequest();
-                    //     System.out.println(system.getLastMessage());
-                    //     break;
-                    // }
+                        system.createRequest();
+                        System.out.println(system.getLastMessage());
+                        break;
+                    }
 
                     default:
                         System.out.println("Invalid choice.");

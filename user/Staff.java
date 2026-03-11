@@ -1,21 +1,25 @@
 package user;
 public class Staff implements InStaff {
     private String staffIdString;
-    private String name;
+    private String userName;
+    private String fullName;
     private String phone;
     private double rating;
     private String password;
-    private String position; 
     private boolean active = true;
+    private float salary;
     public static int staffCount = 0;
 
+
+
+
     // Constructor
-    public Staff(String name, String phone, String password, String position,double rating) {
+    public Staff(String fullname, String userName, String phone, String password,double rating , float salary) {
         this.staffIdString = String.valueOf(++staffCount);
         setPassword(password);
-        setName(name);
+        setName(userName);
+        setFullName(fullName);
         setPhone(phone);
-        setPosition(position);
         setRating(rating);
     }
 
@@ -27,16 +31,35 @@ public class Staff implements InStaff {
     }
 
     // Getters 
-    public String getPassword() { return password; }
+    protected String getPassword() { return password; }
     public String getStaffId() { return staffIdString; }
-    public String getUsername() { return name; }
+    public String getUsername() { return userName; }
     public String getPhone() { return phone; }
     public double getRating() { return rating; }
-    public String getPosition() { return position; }
     public boolean isActive() { return active; }
-    public String getFullname() {return name;}
+    public String getFullname() {return fullName;}
+    public float getSalary() {return salary;}
 
     // Setters
+    public void setSalary(float salary){
+        setSalary(salary);
+    }
+    public void setFullName(String fullName, String password){
+        if(this.password.equals(password)){
+            this.fullName = fullName;
+        }else{
+            System.out.println("Wrong Password!! try agian...");
+        }
+    }
+
+    public void setFullName(String fullName){
+        if(fullName.length() >= 8 || fullName.length() <= 16){
+            this.fullName = fullName;
+        }else{
+            System.out.println("fill with the requestment length");
+        }
+    }
+    
     public void setPassword(String newPassword) {
         // regex
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
@@ -61,20 +84,17 @@ public class Staff implements InStaff {
         }
     }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
 
-    public void setName(String name, String password){
+    public void setName(String userName, String password){
         if(this.password.equals(password)){
-            this.name = name;
+            this.userName = userName;
         }else{
             System.out.println("Wrong Password!! try agian...");
         }
     }
-    public void setName(String name){
-        if(name.length() >= 8 || name.length() <= 16){
-            this.name = name;
+    public void setName(String userName){
+        if(userName.length() >= 8 || userName.length() <= 16){
+            this.userName = userName;
         }else{
             System.out.println("fill with the requestment length");
         }
@@ -119,7 +139,7 @@ public class Staff implements InStaff {
 
     @Override
     public String toString() {
-        return "Staff{staffIdString='" + staffIdString + "', name='" + name +
+        return "Staff{staffIdString='" + staffIdString + "', userName='" + userName +
                 ", rating=" + rating + "}";
     }
 }
