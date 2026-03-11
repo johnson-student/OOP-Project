@@ -4,9 +4,9 @@ public class Courier extends Staff {
     private boolean available;
 
     // Constructor
-    public Courier(Staff s) {
-    super(s.getUsername(), s.getPhone(), s.getPassword(), s.getPosition(), s.getRating());
-    this.available = true;
+    public Courier(String name, String phone, String password, double rating) {
+        super(name, phone, password, "Courier", rating);
+        this.available = true;
     }
     
     public boolean isAvailable() {
@@ -18,20 +18,28 @@ public class Courier extends Staff {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Courier)) return false;
+        Courier other = (Courier) obj;
+        if (!super.equals(obj)) 
+        {
+             return false; 
+        }else if(available != other.available){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public boolean can(String action) {
         if(action.equals(DeliverySystem.UPDATE_ORDER_STATUS)||action.equals(DeliverySystem.VIEW_ORDERS)||action.equals(DeliverySystem.VIEW_CUSTOMERS)){ 
             return true;
         }
         return false;
     }
+}
     
-    // @Override
-    // public boolean equals(Object obj) {
-    //     if (this == obj) return true;
-    //     if (!(obj instanceof Courier)) return false;
-    //     Courier other = (Courier) obj;
-    //     return staffIdString.equals(other.staffIdString);
-    // }
 
     // @Override
     // public String toString() {
@@ -122,4 +130,3 @@ public class Courier extends Staff {
     //     return true;
     // }
 
-}

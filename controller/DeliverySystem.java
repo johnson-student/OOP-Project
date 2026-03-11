@@ -2,13 +2,14 @@ package controller;
 // import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import other.Address;
 import other.DeliveryRequest;
 import other.Parcel;
+import user.BaristaStaff;
+import user.CashierStaff;
 import user.Courier;
-import user.InStaff;
 import user.Manager;
+import user.ManagerStaff;
 import user.Staff;
 import user.User;
 
@@ -43,7 +44,6 @@ public class DeliverySystem {
         this.location =location;
         this.systemName = systemName;
         this.telegram = telegram;
-        
         // Default admin (so system can start)
         seedDefaultAdmin();
         parcelCount = 0;
@@ -61,11 +61,11 @@ public class DeliverySystem {
         parcels.add(parcel);
         parcelCount++;
     }
-
     // Getters
     public int getParcelCount() {
         return parcelCount;
     }
+
     public boolean isStaffLoggedIn() { return loggedInStaff != null; }
     
     public Staff getLoggedInStaff() { return loggedInStaff; }
@@ -97,6 +97,12 @@ public class DeliverySystem {
         Staff s1 = new Staff("Alice", "054154444", "ALice@12345", "Manager", 5.0);
         Manager admin = new Manager(s1, 500.0);
         Staffs.add(admin);
+        // staffs.add(new CashierStaff());
+        // staffs.add(new BaristaStaff());
+        // staffs.add(new ManagerStaff());
+        // for(Staff staff : staffs){
+        //     System.out.println(staff.can("CREATE_ORDER"));
+        // }
     }
     
 // require permission
@@ -107,11 +113,12 @@ public class DeliverySystem {
             setLastMessage("Please login first");
             return false;
         }
-        // if(!loggedInStaff.can(action))
-        // {
-        //     setLastMessage("Permission denied");
-        //     return false;
-        // }
+
+        if(!loggedInStaff.can(action))
+        {
+            setLastMessage("Permission denied");
+            return false;
+        }
 
         return true;
     

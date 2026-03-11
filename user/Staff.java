@@ -6,7 +6,7 @@ public class Staff implements InStaff {
     private double rating;
     private String password;
     private String position; 
-    boolean active = true;
+    private boolean active = true;
     public static int staffCount = 0;
 
     // Constructor
@@ -19,11 +19,8 @@ public class Staff implements InStaff {
         setRating(rating);
     }
 
-  @Override
-    public boolean can(String action) {
-        // TODO Auto-generated method stub
-        return true;
-    }
+    @Override
+    public boolean can(String action) { return false;}
 
     public boolean checkPassword(String input) {
         return password != null && password.equals(input);
@@ -37,9 +34,7 @@ public class Staff implements InStaff {
     public double getRating() { return rating; }
     public String getPosition() { return position; }
     public boolean isActive() { return active; }
-    public String getFullname() {
-        return name;
-     }
+    public String getFullname() {return name;}
 
     // Setters
     public void setPassword(String newPassword) {
@@ -114,10 +109,12 @@ public class Staff implements InStaff {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Staff)) return false;
-        Staff other = (Staff) obj;
-        return staffIdString.equals(other.staffIdString);
+        Staff s1 = (Staff) obj;
+        if(s1.phone.equals(phone))
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override

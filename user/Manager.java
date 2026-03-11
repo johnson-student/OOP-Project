@@ -1,23 +1,38 @@
 package user;
 public class Manager extends Staff {
     private double bonus;
+    private float salary;
     // Constructor
     public Manager(Staff s, double bonus) {
         super(s.getUsername(), s.getPhone(), s.getPassword(), s.getPosition(), s.getRating());
         setBonus(bonus);
     }
-    
-    // getter setter
-    public double setBonus ( double bonus ){
-        if (bonus < 0) {
-            System.out.println("Bonus cannot be negative.");
-            return 0;
-        }
-        return this.bonus = bonus;
-    }
 
+    // getter setter
     public double getBonus() {
         return bonus;
+    }
+    
+    public float getSalary() {
+        return salary;
+    }
+
+    public void setBonus(double bonus) {
+        if (bonus < 0) {
+            System.out.println("Bonus cannot be negative.");
+            return;
+        }
+        this.bonus = bonus;
+    }
+
+    public void setSalary(float salary) {
+        if(salary<400)
+        {
+            System.out.println("error: need more salary");
+        }else
+        {
+            this.salary = salary;
+        }
     }
 
     public boolean approveLeave(Staff staff, int days){
@@ -30,20 +45,30 @@ public class Manager extends Staff {
         // TODO Auto-generated method stub
         return true;
     }
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Manager)) return false;
-        Manager other = (Manager) obj;
-        return getStaffId().equals(other.getStaffId());
-    }
 
     @Override
-    public String toString() {
-        return "Manager{staffId='" + getStaffId() + "', name='" + getUsername() +
-                ", rating=" + getRating() + "}";
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Manager)) return false;
+        
+        Manager other = (Manager) obj;
+        if (!super.equals(obj)) 
+        {
+             return false; 
+        }else if(Float.floatToIntBits(salary) != Float.floatToIntBits(other.salary))
+        { 
+            return false;
+        }  
+        return true;
     }
-    
+
+
+
+    // @Override
+    // public String toString() {
+    //     return "Manager{staffId='" + getStaffId() + "', name='" + getUsername() +
+    //             ", rating=" + getRating() + "}";
+    // }
+}
     // public boolean checkPassword(String input) {
     //     return password != null && password.equals(input);
     // }
@@ -132,4 +157,3 @@ public class Manager extends Staff {
     //     return true;
     // }
 
-}
