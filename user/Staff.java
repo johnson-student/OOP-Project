@@ -1,5 +1,5 @@
 package user;
-public class Staff implements InStaff {
+public abstract class Staff implements InStaff {
     private String staffIdString;
     private String userName;
     private String fullName;
@@ -14,17 +14,18 @@ public class Staff implements InStaff {
 
 
     // Constructor
-    public Staff(String fullname, String userName, String phone, String password,double rating , float salary) {
+    public Staff(String fullName, String userName, String phone, String password,double rating , float salary) {
         this.staffIdString = String.valueOf(++staffCount);
         setPassword(password);
         setName(userName);
         setFullName(fullName);
         setPhone(phone);
         setRating(rating);
+        setSalary(salary);
     }
 
     @Override
-    public boolean can(String action) { return false;}
+    public abstract boolean can(String action);
 
     public boolean checkPassword(String input) {
         return password != null && password.equals(input);
@@ -42,7 +43,7 @@ public class Staff implements InStaff {
 
     // Setters
     public void setSalary(float salary){
-        setSalary(salary);
+        this.salary = salary;
     }
     public void setFullName(String fullName, String password){
         if(this.password.equals(password)){

@@ -1,6 +1,7 @@
 package controller;
 import java.util.Scanner;
-
+import user.User;
+import other.Address;
 public class Main {
 
     public static void main(String[] args) {
@@ -95,28 +96,48 @@ public class Main {
                         break;
                     }
                     case 3: { // Create Order
-                        System.out.print("Customer phone: ");
+                        System.out.print("Enter your phoneNumber: ");
                         String phone = sc.nextLine();
-
-                        System.out.print("Menu item ID: ");
-                        String itemId = sc.nextLine();
+                        User sender =system.findUserByPhone(phone);
                         
                         System.out.print("Enter your Item info: ");
                         System.out.print("Enter your Item type: ");
-                        int type = sc.nextInt();
-    
-                        
-                        System.out.print("Quantity: ");
-                        int qty = sc.nextInt();
-                        sc.nextLine();
-                        
-                        System.out.print("Quantity: ");
-                        int qty = sc.nextInt();
-                        sc.nextLine();
-                        
+                        String type = sc.nextLine();
 
-                        system.createRequest();
+                        System.out.print("Weight: ");
+                        double weight = sc.nextInt();
+                        sc.nextLine();
+                        
+                        System.out.print("price: ");
+                        double price = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Enter receiver info: ");
+                        System.out.print("Enter receiver phoneNumber: ");
+                        String receiverPhone = sc.nextLine();
+                        System.out.print("Enter receiver name: ");
+                        String receiverName = sc.nextLine();
+                        System.out.print("Enter receiver address: ");
+                        System.out.print("Enter receiver city: ");
+                        String receiverCity = sc.nextLine();
+                        System.out.print("Enter receiver district: "); 
+                        String receiverDistrict = sc.nextLine();
+                        System.out.print("Enter receiver street: ");
+                        String receiverStreet = sc.nextLine();
+                        User receiver = new User(receiverName, receiverPhone, new Address(receiverCity, receiverDistrict, receiverStreet));
+
+                       
+                        system.createRequest(sender, receiver, system.createParcel(type, weight, price , sender.getUserID()));
                         System.out.println(system.getLastMessage());
+                        break;
+                    }
+                    case 4: { // Logout
+                        system.staffLogout();
+                        System.out.println(system.getLastMessage());
+                        break;
+                    }
+                    case 0: {
+                        System.out.println("Goodbye!");
                         break;
                     }
 
@@ -134,7 +155,6 @@ public class Main {
     private static void printMainMenu() {
         System.out.println("\n=== MAIN MENU (Not Logged In) ===");
         System.out.println("1) Staff Login");
-        System.out.println("2) View Menu Items");
         System.out.println("0) Exit");
     }
 
@@ -142,14 +162,9 @@ public class Main {
         System.out.println("\n=== STAFF MENU (Logged In) ===");
         System.out.println("Logged in staff: " + system.getLoggedInStaff());
         System.out.println("1) Create Staff");
-        System.out.println("2) Create Customer");
-        System.out.println("3) Create Menu Item");
-        System.out.println("4) Set Menu Item Availability");
-        System.out.println("5) Create Order");
-        System.out.println("6) List Customers");
-        System.out.println("7) List Menu Items");
-        System.out.println("8) List Orders");
-        System.out.println("9) Logout");
+        System.out.println("2) Create User");
+        System.out.println("3) Create Request");
+        System.out.println("4) Logout");
         System.out.println("0) Exit");
     }
 }

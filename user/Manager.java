@@ -1,9 +1,9 @@
 package user;
-public class Manager extends Courier {
+public class Manager extends Staff {
     private double bonus;
     // Constructor
     public Manager(String fullName,String username, String phone, String password, double rating , float salary) {
-        super(fullName,username, phone, password, rating, salary);
+        super(fullName, username, phone, password, rating, salary);
         setBonus(0);
     }
 
@@ -47,7 +47,7 @@ public class Manager extends Courier {
     public boolean equals(Object obj) {
         if (!(obj instanceof Manager)) return false;
         Manager other = (Manager) obj;
-        if (!super.equals(obj)) 
+        if (!super.equals(other)) 
         {
              return false; 
         }else if(Double.doubleToLongBits(bonus) != Double.doubleToLongBits(other.bonus))

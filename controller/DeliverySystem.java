@@ -97,7 +97,7 @@ public class DeliverySystem {
 
 // default admin
     private void seedDefaultAdmin() {
-        Manager admin = new Manager("alice","admin", "054154444", "admin@12345", 5.0, 500);
+        Manager admin = new Manager("Alice Smith","admin", "054154444", "Admin@12345", 5.0, 500);
         Staffs.add(admin);
         // staffs.add(new Courier());
         // staffs.add(new ManagerStaff());
@@ -179,13 +179,13 @@ public class DeliverySystem {
         setLastMessage("Logged out successfully.");
     }
 // create staff
-    public void createStaff(String staffId, String fullName, String phone,
+    public void createStaff(String fullName, String phone,
                             String username, String password, String position) {
 
         if (!requireStaffLogin() || !requirePermission(CREATE_STAFF)) return;
 
-        if (isBlank(staffId) || isBlank(username)) {
-            setLastMessage("Cannot create staff: staffId/username is empty.");
+        if (isBlank(username)) {
+            setLastMessage("Cannot create staff: username is empty.");
             return;
         }
 
@@ -208,6 +208,33 @@ public class DeliverySystem {
         }
     }
     
+    
+    public void createUser(String fullName, String phone,
+        String password, boolean isMember) {
+            
+            if (!requireStaffLogin()) return;
+            
+            if (isBlank(phone)) {
+                setLastMessage("Cannot create customer: phone is empty.");
+            return;
+        }
+        
+        // duplicate check
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getPhone().equals(phone.trim())) {
+                setLastMessage("Cannot create customer: phone already exists.");
+                return;
+            }
+        }
+        users.add(new User(fullName, phone, password, isMember));
+        setLastMessage("Customer created successfully.");
+    }
+    
+    public Parcel createParcel(String type, double weight, double price, String senderID){
+        return new Parcel(type, weight, price, senderID);
+    }
+
+    // calculate fee
     static double calculateFee(Parcel parcel) {
         if (parcel == null) {
             return 0.0;
@@ -222,25 +249,18 @@ public class DeliverySystem {
         return parcel.getWeight() * 0.5 + baseFee;
     }
 
-    public void createUser(String fullName, String phone,
-                               String password, boolean isMember) {
-
-        if (!requireStaffLogin()) return;
-
+    // find User by phone
+    public User findUserByPhone(String phone) {
         if (isBlank(phone)) {
-            setLastMessage("Cannot create customer: phone is empty.");
-            return;
+            setLastMessage("Phone number cannot be empty.");
+            return null;
         }
 
-        // duplicate check
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getPhone().equals(phone.trim())) {
-                setLastMessage("Cannot create customer: phone already exists.");
-                return;
-            }
-        }
-        users.add(new User(fullName, phone, password, isMember));
-        setLastMessage("Customer created successfully.");
+        return users.stream()
+            .filter(u -> phone != null && u.getPhone().equals(phone))
+            .findFirst()
+            .orElse(null);
+        
     }
 
     // like getAvailableDriver()
@@ -291,9 +311,6 @@ public class DeliverySystem {
                 + ", StaffCount=" + Staffs.size() + "]";
     }
     
-    public Parcel createParcel(String type, double weight, double price, String senderID){
-        return new Parcel(type, weight, price, senderID);
-    }
     
 }
     

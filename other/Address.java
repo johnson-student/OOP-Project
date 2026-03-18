@@ -4,7 +4,7 @@ public class Address {
     private String district;
     private String street;
     
-    Address(String city, String district, String street) {
+    public Address(String city, String district, String street) {
         this.city = city;
         this.district = district;
         this.street = street;

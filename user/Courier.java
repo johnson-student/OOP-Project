@@ -5,7 +5,7 @@ public class Courier extends Staff {
     
     // Constructor
     public Courier(String fullName, String username, String phone, String password, double rating ,float salary) {
-        super(fullName,username, phone, password, rating , salary);
+        super(fullName, username, phone, password, rating, salary);
         this.available = true;
     }
 
