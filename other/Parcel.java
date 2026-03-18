@@ -5,7 +5,6 @@ public class Parcel {
     private String parcelId;
     private String type;
     private double weight;
-    private int qtt;
     private double price;
 
     public Parcel(String type, double weight , double price, String senderID) {

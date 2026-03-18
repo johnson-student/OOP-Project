@@ -55,7 +55,10 @@ public class Main {
                 switch (choice) {
 
                     case 1: { // Create Staff
-
+                        if(!system.getLoggedInStaff().can("CREATE_STAFF")) {
+                            System.out.println("You do not have permission to create staff.");
+                            break;
+                        }
                         System.out.print("Full Name: ");
                         String fullName = sc.nextLine();
 
@@ -68,8 +71,23 @@ public class Main {
                         System.out.print("Password: ");
                         String password = sc.nextLine();
 
-                        System.out.print("Position: ");
-                        String position = sc.nextLine();
+                        System.out.print("Choose Position: ");
+                        System.out.println("1) Manager");
+                        System.out.println("2) Courier");
+                        System.out.println("3) Clerk");
+                        int role = sc.nextInt();
+                        sc.nextLine();
+                        String position = "";
+                        if(role == 1){
+                            position = "Manager";
+                        }else if(role == 2){
+                            position = "Courier";
+                        }else if(role == 3){
+                            position = "Clerk";
+                        }else{ 
+                            System.out.println("Invalid position choice.");
+                            break;
+                        }
 
                         system.createStaff(fullName, phone, username, password, position);
                         System.out.println(system.getLastMessage());
@@ -77,6 +95,10 @@ public class Main {
                     }
 
                     case 2: { // Create User
+                        if(!system.getLoggedInStaff().can("CREATE_USER")) {
+                            System.out.println("You do not have permission to create users.");
+                            break;
+                        }
 
                         System.out.print("Full Name: ");
                         String fullName = sc.nextLine();
@@ -95,7 +117,11 @@ public class Main {
                         System.out.println(system.getLastMessage());
                         break;
                     }
-                    case 3: { // Create Order
+                    case 3: { // Create request
+                        if(!system.getLoggedInStaff().can("CREATE_REQUEST")) {
+                            System.out.println("You do not have permission to create requests.");
+                            break;
+                        }
                         System.out.print("Enter your phoneNumber: ");
                         String phone = sc.nextLine();
                         User sender =system.findUserByPhone(phone);

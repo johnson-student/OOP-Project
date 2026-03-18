@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import other.DeliveryRequest;
 import other.Parcel;
+import user.Clerk;
 import user.Courier;
 import user.Manager;
 import user.Staff;
@@ -14,9 +15,9 @@ public class DeliverySystem {
     public static final String CREATE_STAFF = "CREATE_STAFF";
     public static final String CREATE_CUSTOMER = "CREATE_CUSTOMER";
     public static final String SET_PRICE_DELIVERY = "SET_PRICE_DELIVERY";
-    public static final String CREATE_ORDER = "CREATE_ORDER";
+    public static final String CREATE_REQUEST = "CREATE_REQUEST";
     public static final String VIEW_CUSTOMERS = "VIEW_CUSTOMERS";
-    public static final String VIEW_ORDERS = "VIEW_ORDERS";
+    public static final String VIEW_REQUESTS = "VIEW_REQUESTS";
     public static final String UPDATE_ORDER_STATUS = "UPDATE_ORDER_STATUS";
 
     private String systemName;
@@ -99,6 +100,8 @@ public class DeliverySystem {
     private void seedDefaultAdmin() {
         Manager admin = new Manager("Alice Smith","admin", "054154444", "Admin@12345", 5.0, 500);
         Staffs.add(admin);
+        Courier C1 = new Courier("Bob Johnson","courier1", "054154555", "Courier@12345", 4.5, 400);
+        Staffs.add(C1);
         // staffs.add(new Courier());
         // staffs.add(new ManagerStaff());
         // for(Staff staff : staffs){
@@ -205,6 +208,10 @@ public class DeliverySystem {
         {   
             Staffs.add(new Courier(fullName,username, phone, password, 0.0 , 400));
             setLastMessage("Courier created successfully.");
+        }else if(position.equals("Clerk"))
+        {
+            Staffs.add(new Clerk(fullName,username, phone, password, 0.0 , 300));
+            setLastMessage("Clerk created successfully.");
         }
     }
     
