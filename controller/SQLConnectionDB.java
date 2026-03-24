@@ -62,7 +62,7 @@ public class SQLConnectionDB {
     public static void main(String[] args) {
         Connection connection = getConnection();
         ResultSet rs = executeQuery("select *  from employees");
-        int rs2 = executeQuery("SELECT COUNT(*) FROM employees");
+        ResultSet rs2 = executeQuery("SELECT COUNT(*) FROM employees");
         try {
             System.out.println( "Total Employees: " + rs2); 
             while (rs.next()) {

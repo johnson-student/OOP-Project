@@ -49,7 +49,7 @@ public class Courier extends Staff {
 
     @Override
     public boolean can(String action) {
-        if(action.equals(DeliverySystem.UPDATE_ORDER_STATUS)||action.equals(DeliverySystem.VIEW_REQUESTS)||action.equals(DeliverySystem.VIEW_CUSTOMERS)){ 
+        if(action.equals(DeliverySystem.UPDATE_ORDER_STATUS)||action.equals(DeliverySystem.VIEW_REQUESTS)||action.equals(DeliverySystem.VIEW_ALL_DELIVERY)){ 
             return true;
         }
         return false;

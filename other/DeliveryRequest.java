@@ -27,6 +27,10 @@ public class DeliveryRequest {
     }
     
     public String getId() { return id; }
+    public User getUser(){return sender;}
+    public User getReciever(){return receiver;}
+    public Courier getCourier(){return courier;}
+    public Parcel getParcel(){return parcel;}
     
     public void printInfo() {
         System.out.println("=== Delivery Request ===");
@@ -39,8 +43,19 @@ public class DeliveryRequest {
 
      @Override
      public String toString() {
-        return "DeliveryRequest [id=" + id + ", sender=" + sender + ", receiver=" + receiver + ", parcel=" + parcel
-                + ", courier=" + courier + ", fee=" + fee + "]";
+           return "\n===== DELIVERY REQUEST =====" +
+           "\nRequest ID : " + id +
+           "\n\n--- Sender ---" +
+           "\n" + sender +
+           "\n\n--- Receiver ---" +
+           "\n" + receiver +
+           "\n\n--- Courier ---" +
+           "\nUsername : " + courier.getUsername() +
+           "\n\n--- Parcel ---" +
+           "\n" + parcel +
+           "\n\n--- Fee ---" +
+           "\n$" + fee +
+           "\n============================\n";
      }
 
     @Override
