@@ -7,6 +7,7 @@ public class Courier extends Staff {
     public Courier(String fullName, String username, String phone, String password, double rating ,float salary) {
         super(fullName, username, phone, password, rating, salary);
         this.available = true;
+        
     }
 
     
@@ -49,7 +50,7 @@ public class Courier extends Staff {
 
     @Override
     public boolean can(String action) {
-        if(action.equals(DeliverySystem.UPDATE_ORDER_STATUS)||action.equals(DeliverySystem.VIEW_REQUESTS)||action.equals(DeliverySystem.VIEW_ALL_DELIVERY)){ 
+        if(action.equals(DeliverySystem.UPDATE_DELIVERY_STATUS)||action.equals(DeliverySystem.VIEW_REQUESTS)||action.equals(DeliverySystem.VIEW_ALL_DELIVERY)){ 
             return true;
         }
         return false;

@@ -50,7 +50,7 @@ public class Pricing {
 
     @Override
     public String toString() {
-        return "Pricing [baseFee=" + baseFee + ", vulnerable=" + vulnerable + ", device=" + device + ", general="
+        return "Pricing: [baseFee=" + baseFee + ", vulnerable=" + vulnerable + ", device=" + device + ", general="
                 + general + "]";
     }
 

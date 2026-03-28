@@ -45,6 +45,13 @@ public abstract class Staff implements InStaff {
     public void setSalary(float salary){
         this.salary = salary;
     }
+
+    public void setActivec(boolean active){
+        this.active = active;
+    }
+
+
+
     public void setFullName(String fullName, String password){
         if(this.password.equals(password)){
             this.fullName = fullName;

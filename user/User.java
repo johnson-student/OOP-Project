@@ -7,6 +7,7 @@ public class User {
     private String phone;
     private Address address;
     private boolean isMembership;
+    private boolean active;
     private String password;
     private int useCount;
     static  int userCount = 0;
@@ -36,17 +37,26 @@ public class User {
     public Address getAddress() { return address; }
     public boolean isMember() { return isMembership; }
     public int getUseCount() { return useCount; }
+    public boolean isActive() {return active;}
 
     // Setters
     public void setMembership(boolean isMembership){
         this.isMembership = isMembership;
     }
 
-    public void setPassword(String newPassword) {
+    public void setActivec(boolean active){
+        this.active = active;
+    }
+
+    public boolean checkPassword(String input) {
+        return password != null && password.equals(input);
+    }
+
+    public void setPassword(String Password) {
         // regex
         String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
-        if(newPassword.matches(regex) && newPassword.length() >= 8) {
-            this.password = newPassword;
+        if(Password.matches(regex) && Password.length() >= 8) {
+            this.password = Password;
         } else {
             System.out.println("Password must be at least 8 characters long and include a mix of uppercase letters, lowercase letters, numbers, and special characters.");
         }

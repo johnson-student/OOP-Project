@@ -2,5 +2,5 @@ package user;
 
 @FunctionalInterface
 public interface StaffFilter {
-    boolean filter(Staff staff);
+    boolean apply(Staff staff);
 }

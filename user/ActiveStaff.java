@@ -1,7 +1,7 @@
 package user;
 public class ActiveStaff implements StaffFilter {
     @Override
-    public boolean filter(Staff staff) {
+    public boolean apply(Staff staff) {
         return staff.isActive();
     }
 
