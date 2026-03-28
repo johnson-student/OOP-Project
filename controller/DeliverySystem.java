@@ -534,38 +534,100 @@ public class DeliverySystem {
                     String action = menuActions.get(choice - 1);
 
                     switch (action) {
-
                         case CREATE_STAFF: {
+                            String fullName;
+                            String phone;
+                            String userName;
+                            String password;
+                            String position;
+
                             try {
-                                System.out.print("Full Name: ");
-                                String fullName = sc.nextLine();
+                                while (true) {
+                                    System.out.print("Full Name: ");
+                                    fullName = sc.nextLine();
+                                    if (fullName.length() >= 8 && fullName.length() <= 16) {
+                                        break;
+                                    }
+                                    System.out.println("Name must be 8-16 characters.");
 
-                                System.out.print("Phone: ");
-                                String phone = sc.nextLine();
-
-                                System.out.print("Username: ");
-                                String username = sc.nextLine();
-
-                                System.out.print("Password: ");
-                                String password = sc.nextLine();
-
-                                System.out.println("1) Manager\n2) Courier\n3) Clerk");
-                                int role = sc.nextInt();
-                                sc.nextLine();
-
-                                String position;
-                                if (role == 1)
-                                    position = "Manager";
-                                else if (role == 2)
-                                    position = "Courier";
-                                else if (role == 3)
-                                    position = "Clerk";
-                                else {
-                                    System.out.println("Invalid position.");
-                                    break;
                                 }
 
-                                createStaff(fullName, phone, username, password, position);
+                                while (true) {
+                                    System.out.print("Phone: ");
+                                    phone = sc.nextLine();
+
+                                    if (!phone.matches("\\d+")) {
+                                        System.out.println("Input most be a Number");
+                                        continue;
+                                    }
+
+                                    if (!phone.matches("\\d{8,15}")) {
+                                        System.out.println("Phone must be 8-15 digits.");
+                                        continue;
+                                    }
+
+                                    // duplicate check
+                                    // if ( getActiveStaff()!= null) {
+                                    //     System.out.println("Phone already exists.");
+                                    //     continue;
+                                    // }
+
+                                    break;
+                                }
+                                
+                                while (true) {
+                                    System.out.print("UserName: ");
+                                    userName = sc.nextLine();
+                                    if (userName.length() >= 8 && userName.length() <= 16) {
+                                        break;
+                                    }
+                                    System.out.println("Name must be 8-16 characters.");
+
+                                }
+
+                                while (true) {
+                                    System.out.print("Password: ");
+                                    password = sc.nextLine();
+
+                                    String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+
+                                    if (password.matches(regex)) {
+                                        break;
+                                    }
+
+                                    System.out.println(
+                                            "Password must have uppercase, lowercase, number, special char, min 8.");
+                                }
+
+                                
+                                while(true){
+                                    try{
+                                        System.out.println("1) Manager\n2) Courier\n3) Clerk\n");
+                                        int role = sc.nextInt();
+                                        sc.nextLine();
+    
+                                        if (role == 1){
+                                            position = "Manager";
+                                            break;
+                                        }
+                                        else if (role == 2){
+                                            position = "Courier";
+                                            break;
+                                        }
+                                        else if (role == 3){
+                                            position = "Clerk";
+                                            break;
+                                        }
+                                        else {
+                                            System.out.println("Invalid position.");
+                                        }
+                                    }catch(Exception e){
+                                        System.out.println("Choose only Number!");
+                                        sc.nextLine();
+                                    }
+                                }
+
+                                createStaff(fullName, phone, userName, password, position);
                                 System.out.println(getLastMessage());
 
                             } catch (Exception e) {
@@ -599,7 +661,7 @@ public class DeliverySystem {
                                     System.out.print("Phone: ");
                                     phone = sc.nextLine();
 
-                                    if(!phone.matches("\\d+")){
+                                    if (!phone.matches("\\d+")) {
                                         System.out.println("Input most be a Number");
                                         continue;
                                     }
@@ -634,12 +696,20 @@ public class DeliverySystem {
 
                                 while (true) {
                                     try {
-                                        System.out.print("Is Member (true/false): ");
-                                        isMember = sc.nextBoolean();
+                                        System.out.print("Is Member 1:true / 2:false): ");
+                                        int chose = sc.nextInt();
                                         sc.nextLine();
-                                        break;
+                                        if(chose == 1){
+                                            isMember = true;
+                                            break;
+                                        }else if(chose == 2){
+                                            isMember = false;
+                                            break;
+                                        }else{
+                                            System.out.println("invalid choice!");
+                                        }
                                     } catch (Exception e) {
-                                        System.out.println("Enter only true or false.");
+                                        System.out.println("Number only!");
                                         sc.nextLine();
                                     }
                                 }
@@ -648,7 +718,7 @@ public class DeliverySystem {
                                 System.out.println(getLastMessage());
 
                             } catch (Exception e) {
-                                System.out.println("Unexpected error."+e);
+                                System.out.println("Unexpected error." + e);
                                 sc.nextLine();
                             }
 
@@ -726,6 +796,7 @@ public class DeliverySystem {
 
                             } catch (Exception e) {
                                 System.out.println("Number only here!!");
+                                sc.nextLine();
                             }
                             break;
                         }
@@ -739,16 +810,17 @@ public class DeliverySystem {
                                 if (chose == 1) {
                                     updateStatus(false);
                                     System.out.println(getLastMessage());
+                                    break;
                                 } else if (chose == 2) {
                                     updateStatus(true);
                                     System.out.println(getLastMessage());
+                                    break;
                                 }
                             } catch (Exception e) {
                                 System.out.println("Enter Number only");
                                 sc.nextInt();
                             }
 
-                            break;
                         }
 
                         case VIEW_ALL_DELIVERY:
