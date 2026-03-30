@@ -36,7 +36,7 @@ public class DeliveryRequest {
         System.out.println("=== Delivery Request ===");
         System.out.println("Sender: " + sender.getName());
         System.out.println("Receiver: " + receiver.getName());
-        System.out.println("Courier: " + courier.getUsername());
+        System.out.println("Courier: " + courier.getFullname());
         System.out.println("Fee: " + fee + "$");
         System.out.println("parcel info: " + parcel.toString());
     }
@@ -50,11 +50,11 @@ public class DeliveryRequest {
            "\n\n--- Receiver ---" +
            "\n" + receiver +
            "\n\n--- Courier ---" +
-           "\nUsername : " + courier.getUsername() +
-           "\n\n--- Parcel ---" +
-           "\n" + parcel +
+           "\nUsername : " + courier.getFullname() +
            "\n\n--- Fee ---" +
            "\n$" + fee +
+           "\n\n--- Parcel ---" +
+           "\n" + parcel +
            "\n============================\n";
      }
 

@@ -18,6 +18,10 @@ public class User {
         this.address = address;
     }
 
+    public User(String phone){
+        setPhone(phone);
+    }
+
     public User(String name, String phone, String password, boolean isMembership) {
         userID = String.valueOf(++userCount);
         setName(name);
@@ -32,7 +36,12 @@ public class User {
     }
     // Getters
     public String getUserID() { return userID; }
-    public String getName() { return name; }
+    public String getName(){
+        if(name == null){
+           return name = "Unknow";
+        }
+        return name;
+    }
     public String getPhone() { return phone; }
     public Address getAddress() { return address; }
     public boolean isMember() { return isMembership; }
@@ -121,8 +130,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{name='" + name + "', phone='" + phone +
-                "', membership=" + isMembership +
-                ", useCount=" + useCount + "}";
+        return "name: " + name + ", phone: " + phone +
+                ", membership:" + isMembership +
+                ", useCount:" + useCount;
     }
 }

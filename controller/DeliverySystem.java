@@ -30,7 +30,7 @@ public class DeliverySystem {
     public static final String VIEW_DELIVERY_PRICE = "VIEW_DELIVERY_PRICE";
 
     private String systemName;
-    private String location;
+    private Address location;
     private static Pricing pricing;
     private ArrayList<Staff> staffs;
     private ArrayList<User> users;
@@ -41,12 +41,12 @@ public class DeliverySystem {
     private Staff loggedInStaff;
     private String lastMessage;
 
-    DeliverySystem(String systemName, String telegram, String location) {
+    DeliverySystem(String systemName, String telegram, String city, String district, String Street) {
         staffs = new ArrayList<>();
         users = new ArrayList<>();
         requests = new ArrayList<>();
         parcels = new ArrayList<>();
-        this.location = location;
+        setLocation(city, district, Street);
         this.systemName = systemName;
         this.telegram = telegram;
         pricing = new Pricing(2.00, 1.2, 1, 0.5);
@@ -96,7 +96,7 @@ public class DeliverySystem {
         return systemName;
     }
 
-    public String getLocation() {
+    public Address getLocation() {
         return location;
     }
 
@@ -112,8 +112,13 @@ public class DeliverySystem {
         return lastMessage;
     }
 
+    // setter
     private void setLastMessage(String msg) {
         lastMessage = msg;
+    }
+
+    private void setLocation(String city, String district, String street) {
+        location = new Address(city, district, street);
     }
 
     // default admin
@@ -343,10 +348,23 @@ public class DeliverySystem {
             String senderID = r.getUser().getUserID();
 
             System.out.println(
-                    "Status" + "(" + r.getCourier().isAvailable() + ")" + courierName + " (" + "ID" + courierID
+                    "Status" + "(" + (r.getCourier().isAvailable() ? "Avaible" : "Occupied")+ ")" + courierName + " (" + "ID" + (courierID == null ? "No ID" : courierID)
                             + ") -> " + senderName + " (" + "ID" + senderID + ")");
         }
     }
+
+    public void viewFullDelivery(){
+        for(DeliveryRequest r: requests){
+            System.out.println(r.toString());
+        }
+    }
+
+    public void viewBreifDelivery(){
+        for(DeliveryRequest r: requests){
+            r.printInfo();
+        }
+    }
+
 
     // find User by phone
     public User findUserByPhone(String phone) {
@@ -429,6 +447,7 @@ public class DeliverySystem {
         double fee = calculateFee(parcel);
         DeliveryRequest request = new DeliveryRequest(sender, receiver, parcel, courier, fee);
         requests.add(request);
+        sender.increaseUseCount();
 
         courier.setStatus(false);
 
@@ -466,7 +485,7 @@ public class DeliverySystem {
                     printMainMenu();
 
                     try {
-                        System.out.print("Choose: ");
+                        System.out.println("Choose: ");
                         choice = sc.nextInt();
                         sc.nextLine();
                     } catch (Exception e) {
@@ -479,7 +498,7 @@ public class DeliverySystem {
                         case 1: {
                             try {
 
-                                System.out.print("Username: ");
+                                System.out.println("Username: ");
                                 String username = sc.nextLine();
 
                                 Console console = System.console();
@@ -492,7 +511,7 @@ public class DeliverySystem {
 
                                     staffLogin(username, passwordStr);
                                 }
-                                System.out.print(lastMessage);
+                                System.out.println(lastMessage);
                                 break;
                             } catch (Exception e) {
 
@@ -512,7 +531,7 @@ public class DeliverySystem {
                     printStaffMenu();
 
                     try {
-                        System.out.print("Choose: ");
+                        System.out.println("Choose: ");
                         choice = sc.nextInt();
                         sc.nextLine();
                     } catch (Exception e) {
@@ -543,7 +562,7 @@ public class DeliverySystem {
 
                             try {
                                 while (true) {
-                                    System.out.print("Full Name: ");
+                                    System.out.println("Full Name: ");
                                     fullName = sc.nextLine();
                                     if (fullName.length() >= 8 && fullName.length() <= 16) {
                                         break;
@@ -553,7 +572,7 @@ public class DeliverySystem {
                                 }
 
                                 while (true) {
-                                    System.out.print("Phone: ");
+                                    System.out.println("Phone: ");
                                     phone = sc.nextLine();
 
                                     if (!phone.matches("\\d+")) {
@@ -568,15 +587,15 @@ public class DeliverySystem {
 
                                     // duplicate check
                                     // if ( getActiveStaff()!= null) {
-                                    //     System.out.println("Phone already exists.");
-                                    //     continue;
+                                    // System.out.println("Phone already exists.");
+                                    // continue;
                                     // }
 
                                     break;
                                 }
-                                
+
                                 while (true) {
-                                    System.out.print("UserName: ");
+                                    System.out.println("UserName: ");
                                     userName = sc.nextLine();
                                     if (userName.length() >= 8 && userName.length() <= 16) {
                                         break;
@@ -586,7 +605,7 @@ public class DeliverySystem {
                                 }
 
                                 while (true) {
-                                    System.out.print("Password: ");
+                                    System.out.println("Password: ");
                                     password = sc.nextLine();
 
                                     String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
@@ -599,29 +618,25 @@ public class DeliverySystem {
                                             "Password must have uppercase, lowercase, number, special char, min 8.");
                                 }
 
-                                
-                                while(true){
-                                    try{
-                                        System.out.println("1) Manager\n2) Courier\n3) Clerk\n");
+                                while (true) {
+                                    try {
+                                        System.out.println("1) Manager\n2) Courier\n3) Clerk");
                                         int role = sc.nextInt();
                                         sc.nextLine();
-    
-                                        if (role == 1){
+
+                                        if (role == 1) {
                                             position = "Manager";
                                             break;
-                                        }
-                                        else if (role == 2){
+                                        } else if (role == 2) {
                                             position = "Courier";
                                             break;
-                                        }
-                                        else if (role == 3){
+                                        } else if (role == 3) {
                                             position = "Clerk";
                                             break;
-                                        }
-                                        else {
+                                        } else {
                                             System.out.println("Invalid position.");
                                         }
-                                    }catch(Exception e){
+                                    } catch (Exception e) {
                                         System.out.println("Choose only Number!");
                                         sc.nextLine();
                                     }
@@ -645,9 +660,9 @@ public class DeliverySystem {
 
                             try {
 
-                                // ✅ Name validation
+                            
                                 while (true) {
-                                    System.out.print("UserName: ");
+                                    System.out.println("UserName: ");
                                     fullName = sc.nextLine();
 
                                     if (fullName.length() >= 8 && fullName.length() <= 16) {
@@ -656,9 +671,8 @@ public class DeliverySystem {
                                     System.out.println("Name must be 8-16 characters.");
                                 }
 
-                                // ✅ Phone validation
                                 while (true) {
-                                    System.out.print("Phone: ");
+                                    System.out.println("Phone number: ");
                                     phone = sc.nextLine();
 
                                     if (!phone.matches("\\d+")) {
@@ -681,7 +695,7 @@ public class DeliverySystem {
                                 }
 
                                 while (true) {
-                                    System.out.print("Password: ");
+                                    System.out.println("Password: ");
                                     password = sc.nextLine();
 
                                     String regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
@@ -696,16 +710,16 @@ public class DeliverySystem {
 
                                 while (true) {
                                     try {
-                                        System.out.print("Is Member 1:true / 2:false): ");
+                                        System.out.println("Is Member 1:true / 2:false): ");
                                         int chose = sc.nextInt();
                                         sc.nextLine();
-                                        if(chose == 1){
+                                        if (chose == 1) {
                                             isMember = true;
                                             break;
-                                        }else if(chose == 2){
+                                        } else if (chose == 2) {
                                             isMember = false;
                                             break;
-                                        }else{
+                                        } else {
                                             System.out.println("invalid choice!");
                                         }
                                     } catch (Exception e) {
@@ -726,44 +740,138 @@ public class DeliverySystem {
                         }
 
                         case CREATE_REQUEST: {
-                            try {
-                                System.out.print("Phone: ");
-                                String phone = sc.nextLine();
-                                User sender = findUserByPhone(phone);
+                            String sPhone;
+                            User sender;
+                            String type;
+                            Double weight;
+                            Double price;
+                            String rPhone;
+                            String Name;
+                            String city;
+                            String district;
+                            String street;
+                            Address location;
+                            User receiver;
 
-                                if (sender == null) {
-                                    System.out.println("User not found.");
+                            try {
+                                while (true) {
+
+                                    System.out.println("Sender Phone number: ");
+                                    sPhone = sc.nextLine();
+                                    if (!sPhone.matches("\\d+")) {
+                                        System.out.println("Input most be a Number");
+                                        continue;
+                                    }
+
+                                    sender = findUserByPhone(sPhone);
+
+                                    if (sender == null) {
+                                        System.out.println("User not found.");
+                                        sender = new User(sPhone);
+                                        break;
+                                    }
                                     break;
                                 }
 
-                                System.out.print("Type: ");
-                                String type = sc.nextLine();
+                                System.out.println("Receiver Info:\n ");
+                                while (true) {
 
-                                System.out.print("Weight: ");
-                                double weight = sc.nextDouble();
-                                sc.nextLine();
+                                    System.out.println("Receiver Phone: ");
+                                    rPhone = sc.nextLine();
 
-                                System.out.print("Price: ");
-                                double price = sc.nextDouble();
-                                sc.nextLine();
+                                    if (!rPhone.matches("\\d+")) {
+                                        System.out.println("Input most be a Number");
+                                        continue;
+                                    }
 
-                                System.out.print("Receiver Phone: ");
-                                String Phone = sc.nextLine();
+                                    if (sender.getPhone().equals(rPhone)) {
+                                        System.out.println("Sender and Reciever can be the same Phone number!!");
+                                        continue;
+                                    }
 
-                                System.out.print("Receiver Name: ");
-                                String Name = sc.nextLine();
+                                    break;
+                                }
 
-                                System.out.print("City: ");
-                                String city = sc.nextLine();
+                                System.out.println("Receiver Name: ");
+                                Name = sc.nextLine();
 
-                                System.out.print("District: ");
-                                String district = sc.nextLine();
+                                System.out.println("Destination Address:\n ");
 
-                                System.out.print("Street: ");
-                                String street = sc.nextLine();
+                                while(true){
+                                    System.out.println("City: ");
+                                    city = sc.nextLine();
+    
+                                    System.out.println("District: ");
+                                    district = sc.nextLine();
+    
+                                    while (true) {
+                                        System.out.println("Street number: ");
+                                        street = sc.nextLine();
+    
+                                        if (!street.matches("\\d+")) {
+                                            System.out.println("Input most be a Number");
+                                            continue;
+                                        }
+                                        break;
+                                    }
 
-                                User receiver = new User(Name, Phone,
-                                        new Address(city, district, street));
+                                    location = new Address(city, district, street);
+                                    if(location.equals(getLocation())){
+                                        System.out.println("Location can't be at the Branch");
+                                        continue;
+                                    }
+                                    break;
+    
+                                }
+
+                                while (true) {
+                                    try {
+                                        System.out.println(
+                                                "choose Type: \n1): Liquid or Glass\n 2): Device\n 3): General");
+                                        System.out.println("Choice: ");
+                                        int chose = sc.nextInt();
+                                        if (chose == 1) {
+                                            type = "glass";
+                                            break;
+                                        } else if (chose == 2) {
+                                            type = "device";
+                                            break;
+                                        } else if (chose == 3) {
+                                            type = "general";
+                                            break;
+                                        } else {
+                                            System.out.println("Choice Invalid! Choose 1-3 !!");
+                                        }
+
+                                    } catch (Exception e) {
+                                        System.out.println("Input Number only");
+                                        sc.nextLine();
+                                    }
+                                }
+
+                                while (true) {
+                                    try {
+                                        System.out.println("Weight: ");
+                                        weight = sc.nextDouble();
+                                        sc.nextLine();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("Weight must be double!!");
+                                        sc.nextLine();
+                                    }
+                                }
+                                while (true) {
+                                    try {
+                                        System.out.println("Price: ");
+                                        price = sc.nextDouble();
+                                        sc.nextLine();
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println("Price must be double!!");
+                                        sc.nextLine();
+                                    }
+                                }
+                                receiver = new User(Name, rPhone,location);
 
                                 createRequest(sender, receiver,
                                         createParcel(type, weight, price, sender.getUserID()));
@@ -771,34 +879,36 @@ public class DeliverySystem {
                                 System.out.println(getLastMessage());
 
                             } catch (Exception e) {
-                                System.out.println("Error creating request.");
+                                System.out.println("Unexpented Error!! Can't create request.");
                                 sc.nextLine();
                             }
                             break;
                         }
 
                         case UPDATE_DELI_PRICE: {
-                            try {
-                                System.out.print("Base Fee: ");
-                                double base = sc.nextDouble();
-
-                                System.out.print("Vulnerable Price: ");
-                                double vul = sc.nextDouble();
-
-                                System.out.print("Device Price: ");
-                                double device = sc.nextDouble();
-
-                                System.out.print("General Price: ");
-                                double general = sc.nextDouble();
-
-                                modifyPrice(base, vul, device, general);
-                                System.out.println(getLastMessage());
-
-                            } catch (Exception e) {
-                                System.out.println("Number only here!!");
-                                sc.nextLine();
+                            while(true){
+                                try {
+                                    System.out.println("Base Fee: ");
+                                    double base = sc.nextDouble();
+    
+                                    System.out.println("Vulnerable Price: ");
+                                    double vul = sc.nextDouble();
+    
+                                    System.out.println("Device Price: ");
+                                    double device = sc.nextDouble();
+    
+                                    System.out.println("General Price: ");
+                                    double general = sc.nextDouble();
+    
+                                    modifyPrice(base, vul, device, general);
+                                    System.out.println(getLastMessage());
+                                    
+                                    break;
+                                } catch (Exception e) {
+                                    System.out.println("Number only here!!");
+                                    sc.nextLine();
+                                }
                             }
-                            break;
                         }
 
                         case UPDATE_DELIVERY_STATUS: {
@@ -823,9 +933,32 @@ public class DeliverySystem {
 
                         }
 
-                        case VIEW_ALL_DELIVERY:
-                            viewALLDelivery();
-                            break;
+                        case VIEW_ALL_DELIVERY:{
+                            while(true){
+                            try {
+                                System.out.println("\n\n");
+                                viewALLDelivery();
+                                System.out.println("1) Full detail  2)Summery   3)Exit");
+                                System.out.println("Choice: ");
+                                int chose = sc.nextInt();
+                                sc.nextLine();
+
+                                if(chose == 1){
+                                    viewFullDelivery(); 
+                                }else if(chose == 2){
+                                    viewBreifDelivery();
+                                }else if(chose == 3){
+                                    break;
+                                }else{
+                                    System.out.println("Invalid Choice!! Choose 1-3 ");
+                                }
+                                
+                            } catch (Exception e) {
+                                System.out.println("Number only!!");
+                            }
+                            
+                        }
+                        }
 
                         case VIEW_REQUESTS:
                             viewUserRequest();
@@ -894,7 +1027,7 @@ public class DeliverySystem {
             opt++;
         }
         if (getLoggedInStaff().can("VIEW_REQUESTS")) {
-            System.out.println(opt + ")veiw User");
+            System.out.println(opt + ")View User Request Detial");
             menuActions.add(VIEW_REQUESTS);
             opt++;
         }
