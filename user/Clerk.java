@@ -3,6 +3,7 @@ import controller.DeliverySystem;
 
 public class Clerk extends Staff {
     
+    
     public Clerk(String fullName, String username, String phone, String password, double rating ,float salary) {
         super(fullName, username, phone, password, rating, salary);
     }

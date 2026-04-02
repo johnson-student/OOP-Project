@@ -16,10 +16,12 @@ public class User {
         setName(name);
         setPhone(phone);
         this.address = address;
+        useCount = 0;
     }
 
     public User(String phone){
         setPhone(phone);
+        useCount = 0;
     }
 
     public User(String name, String phone, String password, boolean isMembership) {

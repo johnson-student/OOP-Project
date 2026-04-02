@@ -175,7 +175,7 @@ public abstract class Staff implements InStaff {
 
     @Override
     public String toString() {
-        return "Staff{staffIdString='" + staffIdString + "', userName='" + userName +
-                ", rating=" + rating + "}";
+        return "(staffId:" + staffIdString + ", userName:" + userName +
+                ", rating:" + rating + ")";
     }
 }

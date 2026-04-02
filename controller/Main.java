@@ -1,7 +1,5 @@
 package controller;
-import java.util.Scanner;
-import user.User;
-import other.Address;
+
 public class Main {
 
     public static void main(String[] args) {

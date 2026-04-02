@@ -45,7 +45,7 @@ public class Courier extends Staff {
     }
     @Override
     public String toString() {
-        return super.toString() + "Available:" + available;
+        return super.toString() + " Status:" + (available ? "Available" : "Occupied");
     }
 
     @Override

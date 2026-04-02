@@ -181,17 +181,17 @@ public class DeliverySystem {
     }
 
     // login / logout
-    public void staffLogin(String username, String password) {
+    public void staffLogin(String logMethod, String password) {
 
-        if (isBlank(username) || password == null) {
-            setLastMessage("Login failed: missing username/password.");
+        if (isBlank(logMethod) || password == null) {
+            setLastMessage("Login failed: missing logMethod/password.");
             return;
         }
 
         for (int i = 0; i < staffs.size(); i++) {
             Staff s = staffs.get(i);
 
-            if (s.getUsername().equalsIgnoreCase(username.trim())) {
+            if (s.getUsername().equalsIgnoreCase(logMethod.trim()) || s.getPhone().equals(logMethod.trim())) {
 
                 if (!s.isActive()) {
                     setLastMessage("Login failed: staff is inactive.");
@@ -352,7 +352,7 @@ public class DeliverySystem {
             return;
 
         if (requests.isEmpty()) {
-            setLastMessage("No request Today");
+            System.out.println("No request Today");
             return;
         }
 
@@ -507,7 +507,7 @@ public class DeliverySystem {
             setLastMessage("Please complete the current request before setting to available!!");
             return;
         }
-        
+
         courier.setStatus(available);
 
         setLastMessage("Update status to: " + (courier.isAvailable() ? "Available" : "Occupied"));
@@ -565,7 +565,17 @@ public class DeliverySystem {
 
     public void showAllStaff() {
         for (Staff s : staffs) {
-            System.out.println(s.toString());
+            String position;
+            if (s instanceof Courier) {
+                position = "Courier";
+            } else if (s instanceof Manager) {
+                position = "Manager";
+            } else if (s instanceof Clerk) {
+                position = "Clerk";
+            } else {
+                position = "Unknown Position";
+            }
+            System.out.println(" Position: "+ position+ " === " + s.toString());
         }
     }
 
@@ -690,10 +700,10 @@ public class DeliverySystem {
                         case 1: {
                             try {
 
-                                System.out.println("Username: ");
-                                String username = sc.nextLine();
-                                if (username.trim().isEmpty()) {
-                                    System.out.println("Username can't be empty!!");
+                                System.out.println("Username or Phone: ");
+                                String logMethod = sc.nextLine();
+                                if (logMethod.trim().isEmpty()) {
+                                    System.out.println("Username or Phone can't be empty!!");
                                     break;
                                 }
 
@@ -709,7 +719,7 @@ public class DeliverySystem {
                                         break;
                                     }
 
-                                    staffLogin(username, passwordStr);
+                                    staffLogin(logMethod, passwordStr);
                                 }
                                 System.out.println(lastMessage);
                                 break;
@@ -804,11 +814,24 @@ public class DeliverySystem {
                                 while (true) {
                                     System.out.println("UserName: ");
                                     userName = sc.nextLine();
-                                    if (userName.length() >= 4 && userName.length() <= 16) {
-                                        break;
+                                    for (Staff s : staffs) {
+                                        if (s.getUsername().equalsIgnoreCase(userName.trim())) {
+                                            System.out.println("Username already exists.");
+                                            userName = null;
+                                            break;
+                                        }
                                     }
-                                    System.out.println("Username must be 4-16 characters.");
 
+                                    if (userName == null) {
+                                        continue;
+                                    }
+
+                                    if (!(userName.length() >= 4 && userName.length() <= 16)) {
+                                        System.out.println("Username must be 4-16 characters.");
+                                        continue;
+                                    }
+
+                                    break;
                                 }
 
                                 while (true) {
@@ -854,6 +877,7 @@ public class DeliverySystem {
 
                             } catch (Exception e) {
                                 System.out.println("Error creating staff.");
+                                e.printStackTrace();
                                 sc.nextLine();
                             }
                             break;
@@ -868,7 +892,7 @@ public class DeliverySystem {
                             try {
 
                                 while (true) {
-                                    System.out.println("UserName: ");
+                                    System.out.println("FullName: ");
                                     fullName = sc.nextLine();
 
                                     if (fullName.length() >= 8 && fullName.length() <= 16) {
@@ -960,6 +984,11 @@ public class DeliverySystem {
                             User receiver;
 
                             try {
+                                if (getAllAvailableCouriers().isEmpty()) {
+                                    System.out.println("No courier available. Can't create request.");
+                                    break;
+                                }
+
                                 while (true) {
 
                                     System.out.println("Sender Phone number: ");
@@ -1114,9 +1143,8 @@ public class DeliverySystem {
                                     System.out.println("Number only here!!");
                                     sc.nextLine();
                                 }
-                                break;
                             }
-
+                            break;
                         }
 
                         case UPDATE_DELIVERY_STATUS: {
@@ -1279,7 +1307,18 @@ public class DeliverySystem {
         menuActions.clear();
         opt = 1;
         System.out.println("\n=== STAFF MENU (Logged In) ===");
-        System.out.println("Logged in staff: " + getLoggedInStaff());
+        String position;
+        if (getLoggedInStaff() instanceof Courier) {
+            position = "Courier";
+        } else if (getLoggedInStaff() instanceof Manager) {
+            position = "Manager";
+        } else if (getLoggedInStaff() instanceof Clerk) {
+            position = "Clerk";
+        }else{
+            position = "Unknown Position";
+        }
+
+        System.out.println("Logged by: " + getLoggedInStaff().getFullname()+ "("+ position+")" + " " + getLoggedInStaff());
         if (getLoggedInStaff().can("CREATE_STAFF")) {
             System.out.println(opt + ")Create Staff");
             menuActions.add(CREATE_STAFF);

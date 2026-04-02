@@ -9,6 +9,7 @@ public class DeliveryRequest {
     private Parcel parcel;
     private Courier courier;
     private double fee;
+    private Boolean isCompleted;
     public static int requestCount = 0;
 
    public DeliveryRequest(
@@ -24,16 +25,24 @@ public class DeliveryRequest {
         this.parcel = parcel;
         this.courier = courier;
         this.fee = fee;
+        isCompleted = false;
     }
     
+    // getter
     public String getId() { return id; }
     public User getUser(){return sender;}
     public User getReciever(){return receiver;}
     public Courier getCourier(){return courier;}
     public Parcel getParcel(){return parcel;}
+    public double getFee(){return fee;}
+    public Boolean getIsCompleted(){return isCompleted;}
+
+    // setter
+    public void setIsCompleted(Boolean isCompleted){this.isCompleted = isCompleted;}
     
     public void printInfo() {
         System.out.println("=== Delivery Request ===");
+        System.out.println("Request ID: " + id);
         System.out.println("Sender: " + sender.getName());
         System.out.println("Receiver: " + receiver.getName());
         System.out.println("Courier: " + courier.getFullname());
@@ -48,7 +57,8 @@ public class DeliveryRequest {
            "\n\n--- Sender ---" +
            "\n" + sender +
            "\n\n--- Receiver ---" +
-           "\n" + receiver +
+           "\n" + receiver + 
+           "\n"+receiver.getAddress() + 
            "\n\n--- Courier ---" +
            "\nUsername : " + courier.getFullname() +
            "\n\n--- Fee ---" +
