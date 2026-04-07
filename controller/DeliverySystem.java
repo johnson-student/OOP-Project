@@ -688,8 +688,7 @@ public class DeliverySystem {
 
                     try {
                         System.out.println("Choose: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
+                        choice = Integer.parseInt(sc.nextLine()); 
                     } catch (Exception e) {
                         System.out.println("Invalid input! Enter a number.");
                         sc.nextLine();
