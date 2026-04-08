@@ -28,8 +28,10 @@ public class DeliverySystem {
     public static final String VIEW_REQUESTS = "VIEW_REQUESTS";
     public static final String VIEW_ALL_DELIVERY_REQUEST = "VIEW_ALL_DELIVERY_REQUEST";
     public static final String VIEW_ALL_DELIVERY_HISTORY = "VIEW_ALL_DELIVERY_HISTORY";
-    public static final String UPDATE_DELIVERY_STATUS = "UPDATE_DELIVERY_STATUS";
+    public static final String UPDATE_Courier_STATUS = "UPDATE_Courier_STATUS";
+    public static final String UPDATE_REQUEST_STATUS = "UPDATE_REQUEST_STATUS";
     public static final String VIEW_DELIVERY_PRICE = "VIEW_DELIVERY_PRICE";
+    public static final String VIEW_CURRENT_USER = "VIEW_CURRENT_USER";
 
     private String systemName;
     private Address location;
@@ -58,6 +60,10 @@ public class DeliverySystem {
     }
 
     public void addStaff(Staff staff) {
+        if (!(requireStaffLogin())) {
+            System.out.print("Can't not add staff, Please Log IN");
+            return;
+        }
         if (staff == null) {
             setLastMessage("Staff cannot be null");
             return;
@@ -66,6 +72,10 @@ public class DeliverySystem {
     }
 
     public void addUser(User user) {
+        if (!(requireStaffLogin())) {
+            System.out.print("Can't add user, Please Log IN");
+            return;
+        }
         if (user == null) {
             setLastMessage("User cannot be null");
             return;
@@ -74,6 +84,10 @@ public class DeliverySystem {
     }
 
     public void addParcel(Parcel parcel) {
+        if (!(requireStaffLogin())) {
+            System.out.print("can't not add parcel, Please Log IN");
+            return;
+        }
         if (parcel == null) {
             setLastMessage("Parcel cannot be null");
             return;
@@ -150,10 +164,8 @@ public class DeliverySystem {
 
     // require permission
     private boolean requirePermission(String action) {
-        if (loggedInStaff == null) {
-            setLastMessage("Please login first");
+        if (!requireStaffLogin())
             return false;
-        }
 
         if (!loggedInStaff.can(action)) {
             setLastMessage("Permission denied");
@@ -252,7 +264,7 @@ public class DeliverySystem {
     public void createUser(String userName, String phone,
             String password, boolean isMember) {
 
-        if (!requireStaffLogin())
+        if (!requirePermission(CREATE_USER))
             return;
 
         if (isBlank(phone)) {
@@ -292,6 +304,9 @@ public class DeliverySystem {
 
     // Update price
     public void modifyPrice(double base, double vul, double device, double general) {
+        if (!requirePermission(UPDATE_DELI_PRICE))
+            return;
+
         if (pricing == null) {
             pricing = new Pricing(base, vul, device, general);
         } else {
@@ -305,6 +320,20 @@ public class DeliverySystem {
 
     public void viewPrice() {
         System.out.println(pricing.toString());
+    }
+
+    // =================
+    // View Current User
+    // =================
+    public void viewCurrentUser() {
+        if (users == null || users.isEmpty()) {
+            System.out.println("No User Created!!");
+            return;
+        }
+
+        for (User u : users) {
+            System.out.println(u);
+        }
     }
 
     // ==============
@@ -362,6 +391,8 @@ public class DeliverySystem {
             if (r.getIsCompleted()) {
                 continue;
             }
+            if (r.getCourier() == null)
+                continue;
             hasRequest = true;
             count++;
             String courierName = r.getCourier().getFullname();
@@ -384,7 +415,7 @@ public class DeliverySystem {
         }
     }
 
-    public void viewAllDelivery() {
+    public void viewAllDeliveryDetail() {
         for (DeliveryRequest r : requests) {
             if (!(r.getIsCompleted())) {
                 System.out.println(r.toString());
@@ -437,9 +468,7 @@ public class DeliverySystem {
 
         if (!found) {
             System.out.println("No request");
-        } else {
-            System.out.println("finished");
-        }
+        } 
     }
 
     // view all delivery history detail and summery
@@ -499,6 +528,13 @@ public class DeliverySystem {
     public void updateStatus(boolean available) {
         if (!(requireStaffLogin()))
             return;
+        if (!requirePermission(UPDATE_Courier_STATUS))
+            return;
+
+        if (!(getLoggedInStaff() instanceof Courier)) {
+            System.out.println("You are not Courier");
+            return;
+        }
 
         Courier courier = (Courier) loggedInStaff;
 
@@ -524,8 +560,19 @@ public class DeliverySystem {
 
     // Update status by manager
     public void updateStatus(String staffId, boolean available) {
-        if (!(requireStaffLogin()))
+        if (!(requireStaffLogin())) {
+            System.out.println("login first");
             return;
+        }
+
+        if (!(requirePermission(UPDATE_Courier_STATUS)))
+            return;
+
+        if (!(getLoggedInStaff() instanceof Manager)) {
+            System.out.println("You are not Manager");
+            return;
+        }
+
         Staff staff = findStaffById(staffId);
         if (staff == null) {
             setLastMessage("Staff ID not found.");
@@ -550,16 +597,63 @@ public class DeliverySystem {
     public void updateRequestStatus(boolean isCompleted) {
         if (!(requireStaffLogin()))
             return;
+
+        if (!requirePermission(UPDATE_REQUEST_STATUS))
+            return;
+
+        if (!(loggedInStaff instanceof Courier)) {
+            setLastMessage("Only courier allowed.");
+            return;
+        }
+        if (requests == null || requests.isEmpty()) {
+            setLastMessage("No request Today");
+            return;
+        }
         Courier courier = (Courier) loggedInStaff;
+        boolean haveRequest = false;
 
         for (int i = requests.size() - 1; i >= 0; i--) {
             DeliveryRequest r = requests.get(i);
-            if (r.getCourier().equals(courier)) {
+            if (r.getCourier() != null && r.getCourier().equals(courier) && !r.getIsCompleted()) {
                 r.setIsCompleted(isCompleted);
                 updateStatus(isCompleted);
+                haveRequest = true;
                 setLastMessage("Request " + r.getId() + " marked as " + (isCompleted ? "completed" : "pending"));
                 break;
             }
+        }
+        if (!haveRequest) {
+            setLastMessage("No More Request");
+        }
+    }
+
+    // update by manager
+    public void updateRequestStatus(String requestID, boolean isCompleted) {
+        if (!(requireStaffLogin()))
+            return;
+
+        if (!requirePermission(UPDATE_REQUEST_STATUS))
+            return;
+
+        if (requests == null || requests.isEmpty()) {
+            setLastMessage("No request");
+            return;
+        }
+
+        boolean isMatch = false;
+
+        for (int i = requests.size() - 1; i >= 0; i--) {
+            DeliveryRequest r = requests.get(i);
+            if (r.getId() != null && r.getId().equals(requestID) && !r.getIsCompleted()) {
+                r.setIsCompleted(isCompleted);
+                updateStatus(r.getCourier().getStaffId(), isCompleted);
+                isMatch = true;
+                setLastMessage("Request " + r.getId() + " marked as " + (isCompleted ? "completed" : "pending"));
+                break;
+            }
+        }
+        if (!isMatch) {
+            setLastMessage("No match request ID");
         }
     }
 
@@ -575,7 +669,7 @@ public class DeliverySystem {
             } else {
                 position = "Unknown Position";
             }
-            System.out.println(" Position: "+ position+ " === " + s.toString());
+            System.out.println(" Position: " + position + " === " + s.toString());
         }
     }
 
@@ -638,14 +732,17 @@ public class DeliverySystem {
             User sender,
             User receiver,
             Parcel parcel) {
-        Courier courier = getAllAvailableCouriers().stream().findFirst().orElse(null);
+        if (!requirePermission(CREATE_REQUEST))
+            return null;
 
-        addParcel(parcel);
+        Courier courier = getAllAvailableCouriers().stream().findFirst().orElse(null);
 
         if (courier == null) {
             System.out.println("No courier available.");
             return null;
         }
+        addParcel(parcel);
+
         double fee = calculateFee(parcel);
         DeliveryRequest request = new DeliveryRequest(sender, receiver, parcel, courier, fee);
         requests.add(request);
@@ -688,7 +785,8 @@ public class DeliverySystem {
 
                     try {
                         System.out.print("Choose: ");
-                        choice = Integer.parseInt(sc.nextLine());
+                        choice = sc.nextInt();
+                        sc.nextLine();
                     } catch (Exception e) {
                         System.out.println("Invalid input! Enter a number.");
                         sc.nextLine();
@@ -996,6 +1094,10 @@ public class DeliverySystem {
                                         System.out.println("Input most be a Number");
                                         continue;
                                     }
+                                    if (!sPhone.matches("\\d{8,15}")) {
+                                        System.out.println("Phone must be 8-15 digits.");
+                                        continue;
+                                    }
 
                                     sender = findUserByPhone(sPhone);
 
@@ -1015,6 +1117,11 @@ public class DeliverySystem {
 
                                     if (!rPhone.matches("\\d+")) {
                                         System.out.println("Input most be a Number");
+                                        continue;
+                                    }
+
+                                    if (!rPhone.matches("\\d{8,15}")) {
+                                        System.out.println("Phone must be 8-15 digits.");
                                         continue;
                                     }
 
@@ -1146,7 +1253,7 @@ public class DeliverySystem {
                             break;
                         }
 
-                        case UPDATE_DELIVERY_STATUS: {
+                        case UPDATE_Courier_STATUS: {
                             if (loggedInStaff instanceof Courier) {
                                 Courier courier = (Courier) loggedInStaff;
                                 if (courier.isAvailable()) {
@@ -1160,32 +1267,43 @@ public class DeliverySystem {
                                 }
                             } else {
                                 try {
-                                    System.out.print("Enter Courier ID: ");
-                                    String id = sc.nextLine();
-                                    if (id.trim().isEmpty()) {
-                                        System.out.println("ID can't be empty!!");
-                                        break;
-                                    }
-                                    if (!(findStaffById(id) instanceof Courier)) {
-                                        System.out.println("Staff is not a courier!!");
-                                        break;
-                                    }
+                                    while (true) {
+                                        System.out.print("Enter Courier ID: ");
+                                        String id = sc.nextLine();
+                                        if (id.trim().isEmpty()) {
+                                            System.out.println("ID can't be empty!!");
+                                            continue;
+                                        }
 
-                                    Courier courier = (Courier) findStaffById(id);
+                                        if (!id.matches("\\d++")) {
+                                            System.out.println("Enter the Number only");
+                                            continue;
+                                        }
+                                        if (findStaffById(id) == null) {
+                                            System.out.println("Staff ID not found");
+                                            continue;
+                                        }
+                                        if (!(findStaffById(id) instanceof Courier)) {
+                                            System.out.println("Staff is not a courier!!");
+                                            continue;
+                                        }
+                                        Courier courier = (Courier) findStaffById(id);
 
-                                    if (courier == null) {
-                                        System.out.println("Courier not found.");
-                                        break;
-                                    }
+                                        if (courier == null) {
+                                            System.out.println("Courier not found.");
+                                            break;
+                                        }
 
-                                    if (courier.isAvailable()) {
-                                        updateStatus(id, false);
-                                        System.out.println(getLastMessage());
-                                        break;
-                                    } else {
-                                        updateStatus(id, true);
-                                        System.out.println(getLastMessage());
-                                        break;
+                                        if (courier.isAvailable()) {
+                                            updateStatus(id, false);
+                                            System.out.println(getLastMessage());
+                                            break;
+                                        } else {
+                                            updateStatus(id, true);
+                                            System.out.println(getLastMessage());
+                                            break;
+                                        }
+
                                     }
                                 } catch (Exception e) {
                                     // TODO: handle exception
@@ -1197,9 +1315,40 @@ public class DeliverySystem {
 
                         }
 
-                        case "Update_Request_Status": {
-                            updateRequestStatus(true);
-                            System.out.println(getLastMessage());
+                        case UPDATE_REQUEST_STATUS: {
+                            if (requests == null || requests.isEmpty()) {
+                                System.out.println("No request Today");
+                                break;
+                            }
+                            if (getLoggedInStaff() instanceof Courier) {
+                                updateRequestStatus(true);
+                                System.out.println(getLastMessage());
+                            } else {
+                                try {
+                                    while (true) {
+                                        System.out.println("Updating Request Status");
+                                        System.out.print("Request ID: ");
+                                        String ID = sc.nextLine();
+                                        if (ID.trim().isEmpty()) {
+                                            System.out.println("ID can't be empty!!");
+                                            continue;
+                                        }
+
+                                        if (!ID.matches("\\d++")) {
+                                            System.out.println("Enter the Number only");
+                                            continue;
+                                        }
+
+                                        updateRequestStatus(ID, true);
+                                        System.out.println(getLastMessage());
+                                        break;
+                                    }
+
+                                } catch (Exception e) {
+                                    System.out.println("Error update");
+                                    sc.nextLine();
+                                }
+                            }
                             break;
                         }
 
@@ -1242,7 +1391,7 @@ public class DeliverySystem {
                                     sc.nextLine();
 
                                     if (chose == 1) {
-                                        viewAllDelivery();
+                                        viewAllDeliveryDetail();
                                     } else if (chose == 2) {
                                         viewBreifDelivery();
                                     } else if (chose == 3) {
@@ -1257,6 +1406,10 @@ public class DeliverySystem {
                             }
                             break;
                         }
+
+                        case VIEW_CURRENT_USER:
+                            viewCurrentUser();
+                            break;
 
                         case VIEW_REQUESTS:
                             viewRequest();
@@ -1313,11 +1466,12 @@ public class DeliverySystem {
             position = "Manager";
         } else if (getLoggedInStaff() instanceof Clerk) {
             position = "Clerk";
-        }else{
+        } else {
             position = "Unknown Position";
         }
 
-        System.out.println("Logged by: " + getLoggedInStaff().getFullname()+ "("+ position+")" + " " + getLoggedInStaff());
+        System.out.println(
+                "Logged by: " + getLoggedInStaff().getFullname() + "(" + position + ")" + " " + getLoggedInStaff());
         if (getLoggedInStaff().can("CREATE_STAFF")) {
             System.out.println(opt + ")Create Staff");
             menuActions.add(CREATE_STAFF);
@@ -1333,9 +1487,10 @@ public class DeliverySystem {
             menuActions.add(CREATE_REQUEST);
             opt++;
         }
-        if (getLoggedInStaff().can("UPDATE_DELIVERY_STATUS")) {
-            System.out.println(opt + ")UPDATE Courier STATUS");
-            menuActions.add(UPDATE_DELIVERY_STATUS);
+        if (getLoggedInStaff().can("UPDATE_Courier_STATUS")) {
+            System.out.println(
+                    opt + (getLoggedInStaff() instanceof Courier ? ")Update My Status" : ")Update Courier Status"));
+            menuActions.add(UPDATE_Courier_STATUS);
             opt++;
         }
         if (getLoggedInStaff().can("UPDATE_DELI_PRICE")) {
@@ -1353,9 +1508,9 @@ public class DeliverySystem {
             menuActions.add("historybycourier");
             opt++;
         }
-        if (getLoggedInStaff() instanceof Courier) {
+        if (getLoggedInStaff().can("UPDATE_REQUEST_STATUS")) {
             System.out.println(opt + ")Update Request Status");
-            menuActions.add("Update_Request_Status");
+            menuActions.add(UPDATE_REQUEST_STATUS);
             opt++;
         }
         if (getLoggedInStaff().can("VIEW_ALL_DELIVERY")) {
@@ -1366,6 +1521,11 @@ public class DeliverySystem {
         if (getLoggedInStaff().can("VIEW_ALL_DELIVERY_HISTORY")) {
             System.out.println(opt + ")view All Delivery History");
             menuActions.add(VIEW_ALL_DELIVERY_HISTORY);
+            opt++;
+        }
+        if (getLoggedInStaff().can("VIEW_CURRENT_USER")) {
+            System.out.println(opt + ")View User");
+            menuActions.add(VIEW_CURRENT_USER);
             opt++;
         }
 

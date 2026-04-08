@@ -42,7 +42,7 @@ public class DeliveryRequest {
     
     public void printInfo() {
         System.out.println("=== Delivery Request ===");
-        System.out.println("Request ID: " + id);
+        System.out.println("Request ID: " + id +" ("+ (isCompleted ? "Completed" : "pending"));
         System.out.println("Sender: " + sender.getName());
         System.out.println("Receiver: " + receiver.getName());
         System.out.println("Courier: " + courier.getFullname());
@@ -53,7 +53,7 @@ public class DeliveryRequest {
      @Override
      public String toString() {
            return "\n===== DELIVERY REQUEST =====" +
-           "\nRequest ID : " + id +
+           "\nRequest ID : " + id + " ("+ (isCompleted ? "Completed" : "pending")+
            "\n\n--- Sender ---" +
            "\n" + sender +
            "\n\n--- Receiver ---" +
