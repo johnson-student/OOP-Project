@@ -1094,6 +1094,10 @@ public class DeliverySystem {
 
                                     System.out.print("Sender Phone number: ");
                                     sPhone = sc.nextLine();
+                                    if(isBlank(sPhone)){
+                                        System.out.println("Phone can't be empty");
+                                        continue;
+                                    }
                                     if (!sPhone.matches("\\d+")) {
                                         System.out.println("Input most be a Number");
                                         continue;
@@ -1118,6 +1122,11 @@ public class DeliverySystem {
 
                                     System.out.print("Receiver Phone: ");
                                     rPhone = sc.nextLine();
+                                       
+                                    if(isBlank(rPhone)){
+                                        System.out.println("Phone can't be empty");
+                                        continue;
+                                    }
 
                                     if (!rPhone.matches("\\d+")) {
                                         System.out.println("Input most be a Number");
