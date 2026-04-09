@@ -21,15 +21,15 @@ import other.Pricing;
 public class DeliverySystem {
 
     public static final String CREATE_STAFF = "CREATE_STAFF";
-    public static final String CREATE_USER = "CREATE_CUSTOMER";
-    public static final String UPDATE_DELI_PRICE = "UPDATE_DELI_PRICE";
+    public static final String CREATE_USER = "CREATE_USER";
     public static final String CREATE_REQUEST = "CREATE_REQUEST";
+    public static final String UPDATE_DELI_PRICE = "UPDATE_DELI_PRICE";
+    public static final String UPDATE_Courier_STATUS = "UPDATE_Courier_STATUS";
+    public static final String UPDATE_REQUEST_STATUS = "UPDATE_REQUEST_STATUS";
     public static final String VIEW_ALL_DELIVERY = "VIEW_ALL_DELIVERY";
     public static final String VIEW_REQUESTS = "VIEW_REQUESTS";
     public static final String VIEW_ALL_DELIVERY_REQUEST = "VIEW_ALL_DELIVERY_REQUEST";
     public static final String VIEW_ALL_DELIVERY_HISTORY = "VIEW_ALL_DELIVERY_HISTORY";
-    public static final String UPDATE_Courier_STATUS = "UPDATE_Courier_STATUS";
-    public static final String UPDATE_REQUEST_STATUS = "UPDATE_REQUEST_STATUS";
     public static final String VIEW_DELIVERY_PRICE = "VIEW_DELIVERY_PRICE";
     public static final String VIEW_CURRENT_USER = "VIEW_CURRENT_USER";
 
@@ -644,7 +644,11 @@ public class DeliverySystem {
 
         for (int i = requests.size() - 1; i >= 0; i--) {
             DeliveryRequest r = requests.get(i);
-            if (r.getId() != null && r.getId().equals(requestID) && !r.getIsCompleted()) {
+            if (r.getId() != null && r.getId().equals(requestID)) {
+                if(r.getIsCompleted()){
+                    setLastMessage("Request "+r.getId()+" already set to complete");
+                    return;
+                }
                 r.setIsCompleted(isCompleted);
                 updateStatus(r.getCourier().getStaffId(), isCompleted);
                 isMatch = true;
@@ -1279,20 +1283,8 @@ public class DeliverySystem {
                                             System.out.println("Enter the Number only");
                                             continue;
                                         }
-                                        if (findStaffById(id) == null) {
-                                            System.out.println("Staff ID not found");
-                                            continue;
-                                        }
-                                        if (!(findStaffById(id) instanceof Courier)) {
-                                            System.out.println("Staff is not a courier!!");
-                                            continue;
-                                        }
+    
                                         Courier courier = (Courier) findStaffById(id);
-
-                                        if (courier == null) {
-                                            System.out.println("Courier not found.");
-                                            break;
-                                        }
 
                                         if (courier.isAvailable()) {
                                             updateStatus(id, false);
@@ -1498,6 +1490,11 @@ public class DeliverySystem {
             menuActions.add(UPDATE_DELI_PRICE);
             opt++;
         }
+        if (getLoggedInStaff().can("UPDATE_REQUEST_STATUS")) {
+            System.out.println(opt + ")Update Request Status");
+            menuActions.add(UPDATE_REQUEST_STATUS);
+            opt++;
+        }
         if (getLoggedInStaff().can("VIEW_REQUESTS") && getLoggedInStaff() instanceof Courier) {
             System.out.println(opt + ")View User Request Detial");
             menuActions.add(VIEW_REQUESTS);
@@ -1508,23 +1505,19 @@ public class DeliverySystem {
             menuActions.add("historybycourier");
             opt++;
         }
-        if (getLoggedInStaff().can("UPDATE_REQUEST_STATUS")) {
-            System.out.println(opt + ")Update Request Status");
-            menuActions.add(UPDATE_REQUEST_STATUS);
-            opt++;
-        }
+        
         if (getLoggedInStaff().can("VIEW_ALL_DELIVERY")) {
-            System.out.println(opt + ")view All Delivery");
+            System.out.println(opt + ")View All Delivery");
             menuActions.add(VIEW_ALL_DELIVERY);
             opt++;
         }
         if (getLoggedInStaff().can("VIEW_ALL_DELIVERY_HISTORY")) {
-            System.out.println(opt + ")view All Delivery History");
+            System.out.println(opt + ")View All Delivery History");
             menuActions.add(VIEW_ALL_DELIVERY_HISTORY);
             opt++;
         }
         if (getLoggedInStaff().can("VIEW_CURRENT_USER")) {
-            System.out.println(opt + ")View User");
+            System.out.println(opt + ")View All User");
             menuActions.add(VIEW_CURRENT_USER);
             opt++;
         }
