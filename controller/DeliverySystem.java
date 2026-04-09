@@ -293,13 +293,14 @@ public class DeliverySystem {
             return 0.0;
         }
 
-        if (parcel.getType().equals("liquid") || parcel.getType().equals("glass")) {
-            return parcel.getWeight() * pricing.getVulnerable() + pricing.getBaseFee();
+
+        if (parcel.getType().equals("Vulnerable")) {
+            return parcel.getWeight() * pricing.getBaseFee() + pricing.getVulnerable();
         } else if (parcel.getType().equals("device")) {
-            return parcel.getWeight() * pricing.getDevice() + pricing.getBaseFee();
+            return parcel.getWeight()* pricing.getBaseFee() + pricing.getDevice();
         }
 
-        return parcel.getWeight() * pricing.getGeneral() + pricing.getBaseFee();
+        return parcel.getWeight() * pricing.getBaseFee() + pricing.getGeneral() ;
     }
 
     // Update price
@@ -1185,7 +1186,7 @@ public class DeliverySystem {
                                         System.out.print("Choice: ");
                                         int chose = sc.nextInt();
                                         if (chose == 1) {
-                                            type = "glass";
+                                            type = "Vulnerable";
                                             break;
                                         } else if (chose == 2) {
                                             type = "device";
